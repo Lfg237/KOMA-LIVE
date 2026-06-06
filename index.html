@@ -260,7 +260,20 @@ overflow-y:auto;
 overflow-x:hidden;
 padding:15px;
 }
+.episodes{
+display:flex;
+gap:15px;
+overflow-x:auto;
+overflow-y:hidden;
+flex-wrap:nowrap;
+scroll-behavior:smooth;
+-webkit-overflow-scrolling:touch;
+}
 
+.card{
+flex:0 0 auto;
+min-width:220px;
+}
 </style>
 </head>
 
@@ -349,11 +362,10 @@ let USERS = [
 ];
 
 let currentUser;
-
-/* SERIES */
-const SERIES={
-title:"cabo",
-seasons:[[
+const SERIES = [
+  {
+    title: "Cabo",
+    seasons:[[
 "https://youtu.be/Rfc3Hsfidk8?si=3SlfVugULvmOAaoa",
 "https://youtu.be/5Otl_F2GNII?si=-PvMZygxVgBU-OKJ",
 "https://youtu.be/oW4N38BvD4U?si=cq6gxQ5m-1C2FSUC",
@@ -429,7 +441,6 @@ seasons:[[
 "https://youtu.be/jZ0nto3sDdY?si=uqVMe4LXMPPkhCL0",
 "https://youtu.be/JP-mDXJZUCQ?si=MF3uQJNnjO4JHWjJ",
 "https://youtu.be/GMLeYyxsu3k?si=6DDOljBe02bQo8xJ",
-"https://youtu.be/GMLeYyxsu3k?si=6DDOljBe02bQo8xJ",
 "https://youtu.be/EHtLNsHuiCI?si=3WJLOnFd8aQUbdKw",
 "https://youtu.be/wrzuC1T4eCg?si=CSrKKujCy7vvW9Zz",
 "https://youtu.be/yusr0AmhUl4?si=pPxem0vRahsGnpKx",
@@ -458,21 +469,48 @@ seasons:[[
 "https://youtu.be/1mrWSid9otM?si=udf1rJBspnTEIDP4",
 "https://youtu.be/Zf14lNa6JIw?si=UGRXFq6q9b0GeMDu",
 "https://youtu.be/vlxNj4SgdDc?si=ZTab5ivuyb-Oj2it",
-["https://youtu.be/_ERg6BLrYT0?si=M8SP1nXn7d54yYLV"
-]]
-};
+"https://youtu.be/_ERg6BLrYT0?si=M8SP1nXn7d54yYLV"
+      ]
+    ]
+  },
 
+  {
+    title: "Prison Break",
+    seasons: [
+      [
+        "https://youtu.be/videoA",
+        "https://youtu.be/videoB"
+      ]
+    ]
+  },
+
+  {
+    title: "Elite",
+    seasons: [
+      [
+        "https://youtu.be/videoX",
+        "https://youtu.be/videoY"
+      ]
+    ]
+  }
+];
 /* SERIES */
 function renderSeries(){
+
 const content=document.getElementById("content");
 content.innerHTML="";
 
-SERIES.seasons.forEach((season,sIndex)=>{
+SERIES.forEach((serie,serieIndex)=>{
+
+serie.seasons.forEach((season,sIndex)=>{
 
 let div=document.createElement("div");
 div.className="season";
 
-div.innerHTML=`<h2>${SERIES.title} - Saison ${sIndex+1}</h2><div class="episodes"></div>`;
+div.innerHTML=`
+<h2>${serie.title} - Saison ${sIndex+1}</h2>
+<div class="episodes"></div>
+`;
 
 content.appendChild(div);
 
@@ -486,7 +524,8 @@ card.className="card";
 card.innerHTML=`
 <div class="thumb"></div>
 <div class="info">
-<h3>Episode ${eIndex+1}</h3>
+<h3>${serie.title}</h3>
+<p>Episode ${eIndex+1}</p>
 </div>
 `;
 
@@ -498,34 +537,9 @@ container.appendChild(card);
 
 });
 
+});
+
 }
-renderSeries();
-
-/* LOGIN */
-function login(){
-let phone=document.getElementById("phone").value;
-let code=document.getElementById("code").value;
-
-let user=USERS.find(u=>u.phone==phone && u.code==code);
-
-if(!user){
-alert("Erreur");
-return;
-}
-
-if(!user.active){
-alert("Compte bloqué ou expiré");
-return;
-}
-
-currentUser=user;
-
-document.getElementById("login").style.display="none";
-document.body.classList.add("logged");
-
-startTimer();
-}
-
 /* TIMER */
 let timerInterval;
 
@@ -566,7 +580,8 @@ document.getElementById("timer").innerText =
 /* VIDEO */
 function openVideo(url){
 document.getElementById("player").style.display="flex";
-document.getElementById("frame").src=url;
+document.getElementById("frame").src =
+url.replace("youtu.be/","www.youtube.com/embed/").split("?")[0];
 }
 
 function closeVideo(){
@@ -624,15 +639,29 @@ buildVideoList();
 }
 
 function buildVideoList(){
+
 const list=document.getElementById("videoList");
 list.innerHTML="";
 
-SERIES.seasons.forEach((season,sIndex)=>{
+SERIES.forEach((serie,serieIndex)=>{
+
+serie.seasons.forEach((season,sIndex)=>{
+
 season.forEach((video,eIndex)=>{
 
 let div=document.createElement("div");
-div.style.cssText="padding:12px;background:#0f172a;margin-bottom:10px;border-radius:10px;cursor:pointer;";
-div.innerText=`📺 S${sIndex+1} EP${eIndex+1}`;
+
+div.style.cssText=`
+padding:12px;
+background:#0f172a;
+margin-bottom:10px;
+border-radius:10px;
+cursor:pointer;
+color:white;
+font-weight:bold;
+`;
+
+div.innerText=`🎬 ${serie.title} | S${sIndex+1} EP${eIndex+1}`;
 
 div.onclick=()=>{
 document.getElementById("videoMenu").style.display="none";
@@ -642,13 +671,38 @@ openVideo(video);
 list.appendChild(div);
 
 });
-});
-}
 
+});
+
+});
+
+}
+function login(){
+  const phone = document.getElementById("phone").value;
+  const code = document.getElementById("code").value;
+
+  const user = USERS.find(u => u.phone === phone && u.code === code);
+
+  if(!user){
+    alert("Identifiants incorrects");
+    return;
+  }
+
+  currentUser = user;
+
+  document.getElementById("login").style.display = "none";
+  document.body.classList.add("logged");
+
+  renderSeries();
+  startTimer();
+}
+window.onload = () => {
+  // rien ici tant que login pas fait
+};
 </script>
 
 <footer>
-<b style="color:#00d0ff;"KOMA LIVE </b><br>
+<b style="color:#00d0ff;">KOMA LIVE </b><br>
 <small>Streaming • Séries • Films</small>
 </footer>
 
