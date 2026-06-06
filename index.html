@@ -630,9 +630,28 @@ document.getElementById("timer").innerText =
 }
 /* VIDEO */
 function openVideo(url){
-document.getElementById("player").style.display="flex";
-document.getElementById("frame").src =
-url.replace("youtu.be/","www.youtube.com/embed/").split("?")[0];
+  document.getElementById("player").style.display = "flex";
+
+  // CAS PLAYLIST
+  if(url.includes("playlist")){
+    window.open(url, "_blank");
+    return;
+  }
+
+  let videoId = "";
+
+  // lien youtu.be
+  if(url.includes("youtu.be/")){
+    videoId = url.split("youtu.be/")[1].split("?")[0];
+  }
+
+  // lien watch
+  else if(url.includes("watch?v=")){
+    videoId = url.split("watch?v=")[1].split("&")[0];
+  }
+
+  document.getElementById("frame").src =
+    "https://www.youtube.com/embed/" + videoId;
 }
 
 function closeVideo(){
