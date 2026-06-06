@@ -596,7 +596,15 @@ let timerInterval;
 
 function startTimer(){
 
-let time = currentUser.time * 60;
+let saved = localStorage.getItem("koma_time_" + currentUser.phone);
+
+let time;
+
+if(saved){
+  time = parseInt(saved);
+} else {
+  time = currentUser.time * 60;
+}
 
 clearInterval(timerInterval);
 
@@ -605,10 +613,11 @@ timerInterval = setInterval(()=>{
 if(time <= 0){
 
 clearInterval(timerInterval);
-
 alert("Temps terminé - compte expiré");
 
 currentUser.active = false;
+
+localStorage.removeItem("koma_time_" + currentUser.phone);
 
 document.getElementById("login").style.display = "flex";
 document.body.classList.remove("logged");
@@ -617,6 +626,9 @@ return;
 }
 
 time--;
+
+// 💾 SAUVEGARDE chaque seconde
+localStorage.setItem("koma_time_" + currentUser.phone, time);
 
 let h = Math.floor(time/3600);
 let m = Math.floor((time%3600)/60);
@@ -628,6 +640,8 @@ document.getElementById("timer").innerText =
 },1000);
 
 }
+
+
 /* VIDEO */
 function openVideo(url){
   document.getElementById("player").style.display = "flex";
