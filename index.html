@@ -420,12 +420,14 @@ expiry
 }));
 }
 
-/* ===== AFTER LOGIN ===== */
-function afterLogin(u){
-currentUser=u;
-$("login").style.display="none";
-render();
-startTimer(Date.now()+DURATION_MINUTES*60*1000);
+/* ===== AFTER LOGIN ===== */function afterLogin(u){
+    currentUser = u;
+
+    $("login").style.display = "none";
+
+    render();
+
+    startTimer(Date.now() + (u.time * 60 * 1000));
 }
 
 /* ===== AUTO LOGIN ===== */
