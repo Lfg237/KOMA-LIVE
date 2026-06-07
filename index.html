@@ -6,273 +6,126 @@
 <title>KOMA LIVE</title>
 
 <style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial;
-}
-
-/* BODY SCROLL FIX */
 body{
-background:#050816;
-color:white;
+margin:0;font-family:Arial;color:#fff;
+background:radial-gradient(circle,#1a0000,#000);
 overflow:hidden;
 }
 
-body.logged{
-overflow:auto;
+body::before{
+content:"";position:fixed;inset:0;
+background:
+radial-gradient(circle at 20% 20%,rgba(255,80,0,.3),transparent),
+radial-gradient(circle at 80% 30%,rgba(255,0,0,.2),transparent),
+radial-gradient(circle at 50% 80%,rgba(255,120,0,.15),transparent);
+filter:blur(60px);
+animation:move 8s infinite alternate;
+z-index:-1;
 }
 
-/* HEADER */
+@keyframes move{to{transform:translateY(20px) scale(1.1)}}
+
 header{
-position:fixed;
-top:0;
-left:0;
-right:0;
-z-index:1000;
-padding:15px;
-background:#0f172a;
-display:flex;
-justify-content:space-between;
-align-items:center;
+position:fixed;top:0;left:0;right:0;height:55px;
+background:#0a0a0a;display:flex;
+justify-content:space-between;align-items:center;
+padding:0 10px;z-index:10;
 }
 
-.logo{
-font-size:22px;
-font-weight:bold;
-color:#00d0ff;
-display:flex;
-gap:10px;
-align-items:center;
+#topBar{
+position:fixed;top:55px;left:0;right:0;
+display:flex;gap:6px;overflow:auto;
+padding:6px;background:#0b0b0b;
 }
 
-.logo img{
-width:35px;
-height:35px;
-border-radius:8px;
+#topBar button{
+background:#ff5a00;border:none;color:#fff;
+padding:6px 10px;border-radius:10px;
 }
 
-#timer{
-background:#111827;
-padding:8px 10px;
-border-radius:10px;
-color:#00ffcc;
-}
-
-/* SEARCH */
 #searchBar{
-position:fixed;
-top:60px;
-left:0;
-right:0;
-z-index:999;
-background:#0f172a;
-padding:10px;
+position:fixed;top:100px;left:0;right:0;
+padding:8px;background:#0a0a0a;
 }
 
 #searchBar input{
-width:100%;
-padding:12px;
-border:none;
-outline:none;
-border-radius:12px;
-background:#111827;
-color:white;
+width:100%;padding:10px;border:none;
+border-radius:10px;background:#111;color:#fff;
 }
 
-/* CONTENT */
 #content{
-position:absolute;
-top:120px;
-bottom:70px;
-left:0;
-right:0;
-overflow-y:auto;
-padding:15px;
+position:absolute;top:160px;bottom:0;left:0;right:0;
+overflow:auto;padding:10px;
 }
 
-.season{
-margin-bottom:40px;
-}
-
-.season h2{
-margin-bottom:10px;
-color:#00d0ff;
-}
-
-.episodes{
-display:flex;
-gap:15px;
-overflow-x:auto;
-}
+.season{margin-bottom:20px}
+.season h2{color:#ff6a00}
+.episodes{display:flex;gap:10px;overflow:auto}
 
 .card{
-min-width:220px;
-background:#0f172a;
-border-radius:15px;
-overflow:hidden;
-cursor:pointer;
+min-width:180px;background:#111;
+padding:10px;border-radius:10px;
+cursor:pointer;transition:.2s;
 }
+.card:hover{transform:scale(1.05)}
 
-.thumb{
-height:130px;
-background:#111;
-background-size:cover;
-background-position:center;
-}
-
-.info{
-padding:10px;
-}
-
-/* PLAYER */
 .player{
-position:fixed;
-inset:0;
+position:fixed;inset:0;
 background:rgba(0,0,0,.95);
-display:none;
-justify-content:center;
+display:none;justify-content:center;
+align-items:center;z-index:99;
+}
+.player iframe{width:90%;height:80%;border:none}
+
+/* POPUP */
+.popup{
+position:fixed;inset:0;
+display:flex;justify-content:center;
 align-items:center;
-z-index:9999;
-}
-
-.player iframe{
-width:90%;
-height:80%;
-border:none;
-border-radius:20px;
-}
-
-.close{
-position:absolute;
-top:20px;
-right:20px;
-background:red;
-border:none;
-padding:10px 15px;
-color:white;
-border-radius:10px;
-cursor:pointer;
-}
-
-/* LOGIN */
-#login{
-position:fixed;
-inset:0;
-background:#050816;
-display:flex;
-justify-content:center;
-align-items:center;
-z-index:99999;
+background:rgba(0,0,0,.6);
+backdrop-filter:blur(10px);
+z-index:999;
 }
 
 .box{
-width:90%;
-max-width:320px;
-background:#0f172a;
-padding:20px;
-border-radius:20px;
+width:90%;max-width:340px;
+padding:20px;border-radius:16px;
+background:linear-gradient(135deg,#111,#1b1b1b);
+text-align:center;
 }
+
+.box h2{color:#ff5a00}
 
 .box input{
-width:100%;
-padding:14px;
-margin-bottom:10px;
-border:none;
-border-radius:10px;
-background:#1e293b;
-color:white;
+width:100%;padding:10px;margin-top:8px;
+border:none;border-radius:8px;
+background:#222;color:#fff;
 }
 
-.box button{
-width:100%;
-padding:14px;
-border:none;
-border-radius:10px;
-background:#0072ff;
-color:white;
+.btn{
+width:100%;padding:10px;margin-top:10px;
+border:none;border-radius:10px;
 font-weight:bold;
+cursor:pointer;
 }
 
-/* FOOTER */
-footer{
+.loginBtn{background:#ff5a00;color:#fff}
+.adminBtn{background:#444;color:#fff}
+.waBtn{background:#25D366;color:#fff}
+.footer{
 position:fixed;
 bottom:0;
 left:0;
 right:0;
-height:60px;
-z-index:1000;
-background:#0f172a;
-text-align:center;
-padding:10px;
-border-top:1px solid rgba(255,255,255,.1);
-}
-
-/* ADMIN */
-#adminPanel{
-position:fixed;
-inset:0;
-background:#000;
-z-index:99999;
-display:none;
-padding:20px;
-overflow:auto;
-}
-
-table{
-width:100%;
-border-collapse:collapse;
-margin-top:20px;
-}
-
-td,th{
-border:1px solid #333;
-padding:8px;
-text-align:center;
-}
-
-button.adminBtn{
-padding:5px 10px;
-border:none;
-border-radius:6px;
-cursor:pointer;
-background:#00d0ff;
-color:#000;
-}
-
-.seriesBtn{
-padding:8px 12px;
-border:none;
-border-radius:8px;
-background:#00ffcc;
-font-weight:bold;
-cursor:pointer;
-}
-#content{
-position:absolute;
-top:120px;
-bottom:70px;
-left:0;
-right:0;
-overflow-y:auto;
-overflow-x:hidden;
-padding:15px;
-}
-.episodes{
+height:45px;
+background:#0a0a0a;
 display:flex;
-gap:15px;
-overflow-x:auto;
-overflow-y:hidden;
-flex-wrap:nowrap;
-scroll-behavior:smooth;
--webkit-overflow-scrolling:touch;
-}
-
-.card{
-flex:0 0 auto;
-min-width:220px;
+justify-content:center;
+align-items:center;
+color:#ff6a00;
+font-size:13px;
+border-top:1px solid #222;
+z-index:50;
 }
 </style>
 </head>
@@ -280,91 +133,85 @@ min-width:220px;
 <body>
 
 <!-- LOGIN -->
-<div id="login">
-<div class="box">
-<h2>ACCÈS</h2>
-<input id="phone" placeholder="Téléphone">
-<input id="code" placeholder="Code">
-<button onclick="login()">ENTRER</button>
-</div>
+<div id="login" class="popup">
+  <div class="box">
+    <h2>🔥 ACCÈS KOMA LIVE</h2>
+
+    <input id="name" placeholder="Nom">
+    <input id="code" placeholder="Code utilisateur / admin">
+
+    <button class="btn loginBtn" onclick="login()">ENTRER</button>
+    <button class="btn adminBtn" onclick="admin()">ADMIN</button>
+    <button class="btn waBtn" onclick="openWhatsApp()">💬 WhatsApp</button>
+  </div>
 </div>
 
-<!-- HEADER -->
+
 <header>
-<div class="logo">
-<img src="https://raw.githubusercontent.com/Lfg237/image-lovestring/main/file_00000000941c71f4a5497e043e48dd5b.png">
-KOMA LIVE
-</div>
+  <div>🔥 KOMA LIVE</div>
 
-<div id="timer">00:00:00</div>
+  <div id="timer">00:00</div>
 
-<div style="display:flex;gap:10px;">
-<button class="seriesBtn" onclick="toggleVideoList()">📺 Vidéos</button>
-<button class="seriesBtn" onclick="openAdmin()">ADMIN</button>
-</div>
+  <div style="display:flex;gap:6px">
+    <button onclick="openVideoList()" 
+    style="background:#444;border:none;color:#fff;padding:6px 10px;border-radius:8px">
+      📺 Vidéos
+    </button>
+
+    <button onclick="admin()" 
+    style="background:#ff5a00;border:none;color:#fff;padding:6px 10px;border-radius:8px">
+      🔐 Admin
+    </button>
+  </div>
 </header>
 
-<!-- SEARCH -->
-<div id="searchBar">
-<input id="search" placeholder="Rechercher..." onkeyup="searchVideos()">
+
+<div id="topBar">
+<button onclick="go('https://youtube.com')">YT</button>
+<button onclick="go('https://facebook.com')">FB</button>
+<button onclick="go('https://tiktok.com')">TT</button>
 </div>
 
-<!-- CONTENT -->
+<div id="searchBar">
+<input id="search" onkeyup="searchVideos()" placeholder="Rechercher">
+</div>
+
 <div id="content"></div>
 
-<!-- PLAYER -->
 <div class="player" id="player">
-<button class="close" onclick="closeVideo()">FERMER</button>
-<iframe id="frame"></iframe>
-</div>
+  <button onclick="closePlayer()" 
+  style="
+  position:absolute;
+  top:20px;
+  right:20px;
+  background:#ff5a00;
+  border:none;
+  color:white;
+  padding:10px 14px;
+  border-radius:10px;
+  font-weight:bold;
+  cursor:pointer;
+  z-index:9999;
+  ">
+  ← Retour
+  </button>
 
-<!-- ADMIN -->
-<div id="adminPanel">
-<h2 style="color:#00d0ff;">TABLEAU ADMIN</h2>
-<button onclick="closeAdmin()">FERMER</button>
-
-<table>
-<thead>
-<tr>
-<th>Numéro</th>
-<th>Code</th>
-<th>Temps</th>
-<th>Statut</th>
-<th>Action</th>
-</tr>
-</thead>
-<tbody id="adminTable"></tbody>
-</table>
-</div>
-
-<!-- VIDEO LIST -->
-<div id="videoMenu" style="
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.95);
-display:none;
-z-index:10000;
-overflow:auto;
-padding:20px;
-">
-
-<h2 style="color:#00d0ff;">📺 Liste vidéos</h2>
-<div id="videoList"></div>
-
+  <iframe id="frame"></iframe>
 </div>
 
 <script>
 
-/* USERS */
-let USERS = [
-{phone:"670035609",code:"1111",time:120,active:true},
-{phone:"670000002",code:"2222",time:60,active:true}
-];
+const ADMIN="233";
+const SESSION_KEY="koma_session";
+const DURATION_MINUTES=1;
 
-let currentUser;
-const SERIES = [
-  {
-    title: "Cabo",
+let currentUser=null;
+let timerInterval=null;
+
+const USERS=[{name:"kono",code:"x",time:1,active:true}];
+
+const SERIES=[{
+title: "Cabo",
     seasons:[[
 "https://youtu.be/Rfc3Hsfidk8?si=3SlfVugULvmOAaoa",
 "https://youtu.be/5Otl_F2GNII?si=-PvMZygxVgBU-OKJ",
@@ -532,263 +379,249 @@ const SERIES = [
     title: "games of thrones",
     seasons: [
       [
-        "https://youtube.com/playlist?list=PLiQ_AzQ-HCwvZr-D2MUlZ_5weQMODtbl0&si=bOh84W2-n2Bj4CbY",
-"https://youtube.com/playlist?list=PL5uVzgTuGAfhSe-NLpjldJqXotZxSBFCZ&si=H6GL_BfgLE7kk7YM",
-"https://youtube.com/playlist?list=PLdyYtz46NolZCtOwtQA3B8ftUu3b81rvA&si=Gv2D7HWnr1r_fSUl",
-"https://youtube.com/playlist?list=PLdyYtz46Nolb1ovYhSOnbIYFktNHfZUkR&si=xwaSP-0gIQJUId4d",
-"https://youtube.com/playlist?list=PLiQ_AzQ-HCwvZr-D2MUlZ_5weQMODtbl0&si=PZxU3hGdm-lV95EU",
-"https://youtube.com/playlist?list=PLdyYtz46Nola1JiY35_Tl0EMnCww4GZVY&si=v5ky0Nh7whU8WTY_",
-"https://youtube.com/playlist?list=PLdyYtz46NolaMlYLgLQ7J4cZ3Dxv73vp5&si=_bk05mL-u7dzJCW1",
-"https://youtube.com/playlist?list=PLkJ9HqWxWYkU99PcMBgL2NduqMsKU3EgJ&si=11XSGdTwc1Qnk-QV",
-"https://youtube.com/playlist?list=PL5ngj6FR7Ap2B_CxpnOTbG_f9g3jQhlD4&si=5usywu18779Kt_NR"
+        "https://youtube.com/playlist?list=PLiQ_AzQ-HCwvZr-D2MUlZ_5weQMODtbl0&si=bOh84W2-n2Bj4CbY"
+
       ]
     ]
   }
 ];
-/* SERIES */
-function renderSeries(){
 
-const content=document.getElementById("content");
-content.innerHTML="";
+/* HELPERS */
+const $ = (id)=>document.getElementById(id);
 
-SERIES.forEach((serie,serieIndex)=>{
+/* LOGIN */
+function login(){
 
-serie.seasons.forEach((season,sIndex)=>{
+const n = $("name").value.trim();
+const c = $("code").value.trim();
 
-let div=document.createElement("div");
-div.className="season";
+const u = USERS.find(x => x.name === n && x.code === c && x.active);
 
-div.innerHTML=`
-<h2>${serie.title} - Saison ${sIndex+1}</h2>
-<div class="episodes"></div>
-`;
-
-content.appendChild(div);
-
-let container=div.querySelector(".episodes");
-
-season.forEach((video,eIndex)=>{
-
-let card=document.createElement("div");
-card.className="card";
-
-card.innerHTML=`
-<div class="thumb"></div>
-<div class="info">
-<h3>${serie.title}</h3>
-<p>Episode ${eIndex+1}</p>
-</div>
-`;
-
-card.onclick=()=>openVideo(video);
-
-container.appendChild(card);
-
-});
-
-});
-
-});
-
-}
-/* TIMER */
-let timerInterval;
-
-function startTimer(){
-
-let saved = localStorage.getItem("koma_time_" + currentUser.phone);
-
-let time;
-
-if(saved){
-  time = parseInt(saved);
-} else {
-  time = currentUser.time * 60;
-}
-
-clearInterval(timerInterval);
-
-timerInterval = setInterval(()=>{
-
-if(time <= 0){
-
-clearInterval(timerInterval);
-alert("Temps terminé - compte expiré");
-
-currentUser.active = false;
-
-localStorage.removeItem("koma_time_" + currentUser.phone);
-
-document.getElementById("login").style.display = "flex";
-document.body.classList.remove("logged");
-
+if(!u){
+alert("❌ Erreur login");
 return;
 }
 
-time--;
+const expiry = Date.now() + DURATION_MINUTES * 60 * 1000;
 
-// 💾 SAUVEGARDE chaque seconde
-localStorage.setItem("koma_time_" + currentUser.phone, time);
+localStorage.setItem(SESSION_KEY, JSON.stringify({
+name:u.name,
+code:u.code,
+expiry
+}));
 
-let h = Math.floor(time/3600);
-let m = Math.floor((time%3600)/60);
-let s = time%60;
+currentUser=u;
 
-document.getElementById("timer").innerText =
-`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+$("login").style.display="none";
+
+render();
+startTimer(expiry);
+}
+
+/* AUTO LOGIN */
+window.onload = ()=>{
+
+const s = JSON.parse(localStorage.getItem(SESSION_KEY));
+
+if(s && Date.now() < s.expiry){
+
+currentUser = USERS.find(u => u.name===s.name && u.code===s.code);
+
+$("login").style.display="none";
+
+render();
+startTimer(s.expiry);
+
+}else{
+localStorage.removeItem(SESSION_KEY);
+}
+};
+
+/* TIMER (1 = 60 sec) */
+function startTimer(expiry){
+
+clearInterval(timerInterval);
+
+timerInterval=setInterval(()=>{
+
+let t = Math.floor((expiry - Date.now()) / 1000);
+
+if(t <= 0){
+clearInterval(timerInterval);
+localStorage.removeItem(SESSION_KEY);
+showBlocked();
+return;
+}
+
+let m = String(Math.floor(t/60)).padStart(2,'0');
+let s = String(t%60).padStart(2,'0');
+
+$("timer").textContent = `${m}:${s}`;
 
 },1000);
-
 }
 
+/* BLOCK */
+function showBlocked(){
 
-/* VIDEO */
-function openVideo(url){
-  document.getElementById("player").style.display = "flex";
-
-  // CAS PLAYLIST
-  if(url.includes("playlist")){
-    window.open(url, "_blank");
-    return;
-  }
-
-  let videoId = "";
-
-  // lien youtu.be
-  if(url.includes("youtu.be/")){
-    videoId = url.split("youtu.be/")[1].split("?")[0];
-  }
-
-  // lien watch
-  else if(url.includes("watch?v=")){
-    videoId = url.split("watch?v=")[1].split("&")[0];
-  }
-
-  document.getElementById("frame").src =
-    "https://www.youtube.com/embed/" + videoId;
+document.body.insertAdjacentHTML("beforeend",`
+<div class="popup">
+<div class="box">
+<h2>🔒 ACCÈS BLOQUÉ</h2>
+<button class="btn waBtn" onclick="openWhatsApp()">WhatsApp</button>
+</div>
+</div>
+`);
 }
 
-function closeVideo(){
-document.getElementById("player").style.display="none";
-document.getElementById("frame").src="";
+/* ADMIN */
+function admin(){
+
+const c = $("code").value.trim();
+
+if(c !== ADMIN){
+alert("❌ Code admin faux");
+return;
+}
+
+openAdmin();
+}
+
+function openAdmin(){
+
+document.querySelectorAll(".popup.adminPanel").forEach(e=>e.remove());
+
+let html=`
+<div class="popup adminPanel">
+<div class="box">
+
+<h2>ADMIN PANEL</h2>
+
+${USERS.map((u,i)=>`
+<div style="text-align:left;margin:8px 0">
+${u.name} - ${u.active?"ACTIF":"BLOQUÉ"}
+
+<button onclick="toggleUser(${i})"
+style="float:right;background:#ff5a00;border:none;color:#fff;padding:5px;border-radius:6px">
+toggle
+</button>
+</div>
+`).join("")}
+
+<button class="btn loginBtn" onclick="closeAdmin()">FERMER</button>
+
+</div>
+</div>
+`;
+
+document.body.insertAdjacentHTML("beforeend",html);
+}
+
+function toggleUser(i){
+USERS[i].active = !USERS[i].active;
+openAdmin();
+}
+
+function closeAdmin(){
+document.querySelector(".popup.adminPanel")?.remove();
+}
+
+/* RENDER */
+function render(){
+
+$("content").innerHTML="";
+
+SERIES.forEach(s=>{
+  s.seasons.forEach((se,i)=>{
+
+    let d=document.createElement("div");
+    d.className="season";
+    d.innerHTML=`<h2>${s.title} S${i+1}</h2><div class="episodes"></div>`;
+
+    let box=d.querySelector(".episodes");
+
+    se.forEach((v, index)=>{
+      let c=document.createElement("div");
+      c.className="card";
+
+      // 🔥 NUMÉRO AUTOMATIQUE
+      c.innerText = "Episode " + (index + 1);
+
+      c.onclick=()=>play(v);
+      box.appendChild(c);
+    });
+
+    $("content").appendChild(d);
+
+  });
+});
 }
 
 /* SEARCH */
 function searchVideos(){
-let v=document.getElementById("search").value.toLowerCase();
+
+let v = $("search").value.toLowerCase();
+
 document.querySelectorAll(".card").forEach(c=>{
-c.style.display=c.innerText.toLowerCase().includes(v)?"block":"none";
+c.style.display = c.innerText.toLowerCase().includes(v) ? "block" : "none";
 });
 }
 
-/* ADMIN */
-function openAdmin(){
-let code=prompt("Code admin ?");
-if(code!=="233"){alert("Erreur");return;}
+/* WHATSAPP */
+function openWhatsApp(){
 
-document.getElementById("adminPanel").style.display="block";
-renderAdmin();
+let msg =
+`Nom: ${$("name").value}
+Code: ${$("code").value}`;
+
+window.open(
+"https://wa.me/237670035609?text=" + encodeURIComponent(msg),
+"_blank"
+);
 }
 
-function closeAdmin(){
-document.getElementById("adminPanel").style.display="none";
-}
+function go(u){window.open(u,"_blank");}
+function openVideoList(){
 
-function renderAdmin(){
-let t=document.getElementById("adminTable");
-t.innerHTML="";
+let html = `
+<div class="popup">
+  <div class="box" style="max-height:80vh;overflow:auto">
 
-USERS.forEach((u,i)=>{
-t.innerHTML+=`
-<tr>
-<td>${u.phone}</td>
-<td>${u.code}</td>
-<td>${u.time} min</td>
-<td>${u.active?"Actif":"Bloqué"}</td>
-<td><button class="adminBtn" onclick="toggle(${i})">ON/OFF</button></td>
-</tr>`;
-});
-}
-
-function toggle(i){
-USERS[i].active=!USERS[i].active;
-renderAdmin();
-}
-
-/* VIDEO LIST */
-function toggleVideoList(){
-const menu=document.getElementById("videoMenu");
-menu.style.display=menu.style.display==="block"?"none":"block";
-buildVideoList();
-}
-
-function buildVideoList(){
-
-const list=document.getElementById("videoList");
-list.innerHTML="";
-
-SERIES.forEach((serie,serieIndex)=>{
-
-serie.seasons.forEach((season,sIndex)=>{
-
-season.forEach((video,eIndex)=>{
-
-let div=document.createElement("div");
-
-div.style.cssText=`
-padding:12px;
-background:#0f172a;
-margin-bottom:10px;
-border-radius:10px;
-cursor:pointer;
-color:white;
-font-weight:bold;
+    <h2>📺 LISTE VIDÉOS</h2>
 `;
 
-div.innerText=`🎬 ${serie.title} | S${sIndex+1} EP${eIndex+1}`;
+SERIES.forEach(s=>{
+  s.seasons.forEach((se,i)=>{
 
-div.onclick=()=>{
-document.getElementById("videoMenu").style.display="none";
-openVideo(video);
-};
+    html += `<h3 style="color:#ff5a00;text-align:left;margin-top:10px">
+      ${s.title} S${i+1}
+    </h3>`;
 
-list.appendChild(div);
+    se.forEach((v,index)=>{
+      html += `
+      <div onclick="play('${v}')"
+      style="padding:8px;margin:5px 0;background:#222;border-radius:8px;cursor:pointer">
+        Episode ${index+1}
+      </div>`;
+    });
 
+  });
 });
 
-});
+html += `
+    <button class="btn loginBtn" onclick="closeVideoList()">FERMER</button>
+  </div>
+</div>
+`;
 
-});
-
+document.body.insertAdjacentHTML("beforeend", html);
 }
-function login(){
-  const phone = document.getElementById("phone").value;
-  const code = document.getElementById("code").value;
-
-  const user = USERS.find(u => u.phone === phone && u.code === code);
-
-  if(!user){
-    alert("Identifiants incorrects");
-    return;
-  }
-
-  currentUser = user;
-
-  document.getElementById("login").style.display = "none";
-  document.body.classList.add("logged");
-
-  renderSeries();
-  startTimer();
+function closeVideoList(){
+  document.querySelector(".popup:last-of-type")?.remove();
 }
-window.onload = () => {
-  // rien ici tant que login pas fait
-};
 </script>
-
-<footer>
-<b style="color:#00d0ff;">KOMA LIVE </b><br>
-<small>Streaming • Séries • Films</small>
+<footer class="footer">
+  Lesfacilitateurs — Tous droits réservés © 2026
 </footer>
-
 </body>
-  </html>
+</html>
