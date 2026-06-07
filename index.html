@@ -139,7 +139,7 @@ font-size:12px;
     <input id="name" placeholder="Nom">
     <input id="code" placeholder="Code utilisateur / admin">
 
-    <button class="btn loginBtn" onclick="login()">ENTRER</button>
+    <button class="btn loginBtn" id="mainLoginBtn">ENTRER</button>
     <button class="btn adminBtn" onclick="admin()">ADMIN</button>
     <button class="btn waBtn" onclick="openWhatsApp()">💬 WhatsApp</button>
   </div>
@@ -186,10 +186,8 @@ font-size:12px;
 <div class="footer">
 Lesfacilitateurs — Tous droits réservés © 2026
 </div>
-
 <script>
-
-/* FIX IMPORTANT */
+/* ===== FIX CORE ===== */
 const $ = (id)=>document.getElementById(id);
 
 const ADMIN = "233";
@@ -201,6 +199,24 @@ let timerInterval=null;
 
 const USERS=[{name:"kono",code:"x",time:1,active:true}];
 
+/* ===== ADMIN MODE STATE ===== */
+let adminMode = false;
+/* ===== BUTTON FIX ===== */
+window.addEventListener("DOMContentLoaded",()=>{
+
+$("mainLoginBtn").addEventListener("click",()=>{
+
+if(adminMode){
+checkAdmin();
+}else{
+login();
+}
+
+});
+
+});
+
+/* ===== SERIES ===== */
 const SERIES=[{
 title: "Cabo",
     seasons:[[
@@ -377,80 +393,79 @@ title: "Cabo",
   }
 ];
 
-
-/* LOGIN */
+/* ===== LOGIN ===== */
 function login(){
+const n=$("name").value.trim();
+const c=$("code").value.trim();
 
-const n = $("name").value.trim();
-const c = $("code").value.trim();
-
-const u = USERS.find(x=>x.name===n && x.code===c && x.active);
+const u=USERS.find(x=>x.name===n && x.code===c && x.active);
 
 if(!u){
 alert("❌ Erreur login");
 return;
 }
 
-const expiry = Date.now() + DURATION_MINUTES * 60 * 1000;
+saveSession(u);
+afterLogin(u);
+}
 
-localStorage.setItem(SESSION_KEY, JSON.stringify({
+/* ===== SESSION ===== */
+function saveSession(u){
+const expiry = Date.now()+DURATION_MINUTES*60*1000;
+
+localStorage.setItem(SESSION_KEY,JSON.stringify({
 name:u.name,
 code:u.code,
 expiry
 }));
+}
 
+/* ===== AFTER LOGIN ===== */
+function afterLogin(u){
 currentUser=u;
-
 $("login").style.display="none";
-
 render();
-startTimer(expiry);
+startTimer(Date.now()+DURATION_MINUTES*60*1000);
 }
 
-/* AUTO LOGIN */
-window.onload=()=>{
+/* ===== AUTO LOGIN ===== */
+/* ===== BUTTON FIX ===== */
 
-const s = JSON.parse(localStorage.getItem(SESSION_KEY));
+/* ===== BUTTON FIX ===== */
+window.onload = function(){
 
-if(s && Date.now() < s.expiry){
+document.getElementById("mainLoginBtn").onclick = function(){
 
-currentUser = USERS.find(u=>u.name===s.name && u.code===s.code);
-
-$("login").style.display="none";
-
-render();
-startTimer(s.expiry);
-
+if(adminMode){
+checkAdmin();
 }else{
-localStorage.removeItem(SESSION_KEY);
+login();
 }
+
 };
 
-/* TIMER */
+};
+/* ===== TIMER ===== */
 function startTimer(expiry){
-
 clearInterval(timerInterval);
 
 timerInterval=setInterval(()=>{
-
-let t = Math.floor((expiry - Date.now())/1000);
+let t=Math.floor((expiry-Date.now())/1000);
 
 if(t<=0){
 clearInterval(timerInterval);
-localStorage.removeItem(SESSION_KEY);
 showBlocked();
 return;
 }
 
-let m = String(Math.floor(t/60)).padStart(2,'0');
-let s = String(t%60).padStart(2,'0');
-
-$("timer").textContent = `${m}:${s}`;
+$("timer").textContent=
+String(Math.floor(t/60)).padStart(2,'0')+":"+
+String(t%60).padStart(2,'0');
 
 },1000);
 }
 
-/* BLOCK */
+/* ===== BLOCK ===== */
 function showBlocked(){
 document.body.insertAdjacentHTML("beforeend",`
 <div class="popup">
@@ -462,20 +477,55 @@ document.body.insertAdjacentHTML("beforeend",`
 `);
 }
 
-/* ADMIN SIMPLE FIX (IMPORTANT) */
+/* ===== ADMIN OPEN (FIX PRINCIPAL) ===== */
 function admin(){
-const c = prompt("🔐 Code admin :");
 
-if(c !== ADMIN){
-alert("❌ Code faux");
+let code = prompt("Entrer le code admin");
+
+if(code === ADMIN){
+
+openAdminPanel();
+
+}else{
+
+alert("❌ Code admin incorrect");
+
+}
+
+}
+
+/* ===== CHECK ADMIN ===== */
+function checkAdmin(){
+const c=$("code").value.trim();
+
+if(c!==ADMIN){
+alert("❌ Code admin incorrect");
 return;
 }
 
-openAdmin();
+$("login").style.display="none";
+openAdminPanel();
 }
 
-/* ADMIN PANEL */
-function openAdmin(){
+/* ===== RESET LOGIN ===== */
+function resetLogin(){
+
+
+
+$("login").querySelector("h2").innerText =
+"🔥 ACCÈS KOMA LIVE";
+
+$("name").style.display = "block";
+
+$("name").value = "";
+$("code").value = "";
+
+}
+
+/* ===== ADMIN PANEL ===== */
+function openAdminPanel(){
+
+document.getElementById("adminBox")?.remove();
 
 document.body.insertAdjacentHTML("beforeend",`
 <div class="popup" id="adminBox">
@@ -502,18 +552,17 @@ Action
 }
 
 function closeAdmin(){
-$("adminBox")?.remove();
+document.getElementById("adminBox")?.remove();
+resetLogin();
 }
 
 function toggleUser(i){
 USERS[i].active=!USERS[i].active;
-$("adminBox")?.remove();
-openAdmin();
+openAdminPanel();
 }
 
-/* RENDER */
+/* ===== RENDER EPISODES ===== */
 function render(){
-
 $("content").innerHTML="";
 
 SERIES.forEach(s=>{
@@ -539,12 +588,10 @@ $("content").appendChild(d);
 });
 }
 
-/* VIDEO */
+/* ===== VIDEO PLAYER ===== */
 function play(u){
 $("player").style.display="flex";
-$("frame").src=u.includes("youtu")
-?"https://www.youtube.com/embed/"+u.split("/").pop().split("?")[0]
-:u;
+$("frame").src=u;
 }
 
 function closePlayer(){
@@ -552,7 +599,7 @@ $("player").style.display="none";
 $("frame").src="";
 }
 
-/* SEARCH */
+/* ===== SEARCH ===== */
 function searchVideos(){
 let v=$("search").value.toLowerCase();
 
@@ -561,20 +608,15 @@ c.style.display=c.innerText.toLowerCase().includes(v)?"block":"none";
 });
 }
 
-/* NAV */
-function go(u){window.open(u,"_blank");}
-
-/* WHATSAPP */
+/* ===== WHATSAPP ===== */
 function openWhatsApp(){
-
 let msg=`Nom:${$("name").value}\nCode:${$("code").value}`;
 
-window.open("https://wa.me/237670035609?text="+encodeURIComponent(msg),"_blank");
+window.open("https://wa.me/237670035609?text="+encodeURIComponent(msg));
 }
 
-/* LISTE VIDEO */
+/* ===== VIDEO LIST ===== */
 function openVideoList(){
-
 let html=`<div class="popup"><div class="box"><h2>📺 LISTE</h2>`;
 
 SERIES.forEach(s=>{
@@ -588,11 +630,10 @@ Episode ${i2+1}</div>`;
 });
 });
 
-html+=`<button class="btn loginBtn" onclick="this.parentNode.parentNode.remove()">FERMER</button></div></div>`;
+html+=`<button class="btn loginBtn" onclick="this.closest('.popup').remove()">FERMER</button></div></div>`;
 
 document.body.insertAdjacentHTML("beforeend",html);
 }
-
 </script>
 
 </body>
