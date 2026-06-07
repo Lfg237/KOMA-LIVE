@@ -112,20 +112,19 @@ cursor:pointer;
 .loginBtn{background:#ff5a00;color:#fff}
 .adminBtn{background:#444;color:#fff}
 .waBtn{background:#25D366;color:#fff}
+
 .footer{
 position:fixed;
 bottom:0;
 left:0;
 right:0;
-height:45px;
+height:40px;
 background:#0a0a0a;
 display:flex;
 justify-content:center;
 align-items:center;
 color:#ff6a00;
-font-size:13px;
-border-top:1px solid #222;
-z-index:50;
+font-size:12px;
 }
 </style>
 </head>
@@ -146,25 +145,20 @@ z-index:50;
   </div>
 </div>
 
-
 <header>
-  <div>🔥 KOMA LIVE</div>
+<div>🔥 KOMA LIVE</div>
+<div id="timer">00:00</div>
 
-  <div id="timer">00:00</div>
+<div>
+<button onclick="openVideoList()" style="background:#444;color:#fff;border:none;padding:6px 10px;border-radius:8px">
+📺 Vidéos
+</button>
 
-  <div style="display:flex;gap:6px">
-    <button onclick="openVideoList()" 
-    style="background:#444;border:none;color:#fff;padding:6px 10px;border-radius:8px">
-      📺 Vidéos
-    </button>
-
-    <button onclick="admin()" 
-    style="background:#ff5a00;border:none;color:#fff;padding:6px 10px;border-radius:8px">
-      🔐 Admin
-    </button>
-  </div>
+<button onclick="admin()" style="background:#ff5a00;color:#fff;border:none;padding:6px 10px;border-radius:8px">
+🔐 Admin
+</button>
+</div>
 </header>
-
 
 <div id="topBar">
 <button onclick="go('https://youtube.com')">YT</button>
@@ -178,32 +172,29 @@ z-index:50;
 
 <div id="content"></div>
 
+<!-- PLAYER -->
 <div class="player" id="player">
   <button onclick="closePlayer()" 
-  style="
-  position:absolute;
-  top:20px;
-  right:20px;
-  background:#ff5a00;
-  border:none;
-  color:white;
-  padding:10px 14px;
-  border-radius:10px;
-  font-weight:bold;
-  cursor:pointer;
-  z-index:9999;
-  ">
+  style="position:absolute;top:20px;right:20px;background:#ff5a00;border:none;padding:10px;border-radius:8px;color:#fff;z-index:9999">
   ← Retour
   </button>
 
   <iframe id="frame"></iframe>
 </div>
 
+<!-- FOOTER -->
+<div class="footer">
+Lesfacilitateurs — Tous droits réservés © 2026
+</div>
+
 <script>
 
-const ADMIN="233";
-const SESSION_KEY="koma_session";
-const DURATION_MINUTES=1;
+/* FIX IMPORTANT */
+const $ = (id)=>document.getElementById(id);
+
+const ADMIN = "233";
+const SESSION_KEY = "koma_session";
+const DURATION_MINUTES = 1;
 
 let currentUser=null;
 let timerInterval=null;
@@ -386,8 +377,6 @@ title: "Cabo",
   }
 ];
 
-/* HELPERS */
-const $ = (id)=>document.getElementById(id);
 
 /* LOGIN */
 function login(){
@@ -395,7 +384,7 @@ function login(){
 const n = $("name").value.trim();
 const c = $("code").value.trim();
 
-const u = USERS.find(x => x.name === n && x.code === c && x.active);
+const u = USERS.find(x=>x.name===n && x.code===c && x.active);
 
 if(!u){
 alert("❌ Erreur login");
@@ -419,13 +408,13 @@ startTimer(expiry);
 }
 
 /* AUTO LOGIN */
-window.onload = ()=>{
+window.onload=()=>{
 
 const s = JSON.parse(localStorage.getItem(SESSION_KEY));
 
 if(s && Date.now() < s.expiry){
 
-currentUser = USERS.find(u => u.name===s.name && u.code===s.code);
+currentUser = USERS.find(u=>u.name===s.name && u.code===s.code);
 
 $("login").style.display="none";
 
@@ -437,16 +426,16 @@ localStorage.removeItem(SESSION_KEY);
 }
 };
 
-/* TIMER (1 = 60 sec) */
+/* TIMER */
 function startTimer(expiry){
 
 clearInterval(timerInterval);
 
 timerInterval=setInterval(()=>{
 
-let t = Math.floor((expiry - Date.now()) / 1000);
+let t = Math.floor((expiry - Date.now())/1000);
 
-if(t <= 0){
+if(t<=0){
 clearInterval(timerInterval);
 localStorage.removeItem(SESSION_KEY);
 showBlocked();
@@ -463,7 +452,6 @@ $("timer").textContent = `${m}:${s}`;
 
 /* BLOCK */
 function showBlocked(){
-
 document.body.insertAdjacentHTML("beforeend",`
 <div class="popup">
 <div class="box">
@@ -474,36 +462,34 @@ document.body.insertAdjacentHTML("beforeend",`
 `);
 }
 
-/* ADMIN */
+/* ADMIN SIMPLE FIX (IMPORTANT) */
 function admin(){
-
-const c = $("code").value.trim();
+const c = prompt("🔐 Code admin :");
 
 if(c !== ADMIN){
-alert("❌ Code admin faux");
+alert("❌ Code faux");
 return;
 }
 
 openAdmin();
 }
 
+/* ADMIN PANEL */
 function openAdmin(){
 
-document.querySelectorAll(".popup.adminPanel").forEach(e=>e.remove());
-
-let html=`
-<div class="popup adminPanel">
+document.body.insertAdjacentHTML("beforeend",`
+<div class="popup" id="adminBox">
 <div class="box">
 
-<h2>ADMIN PANEL</h2>
+<h2>🔐 ADMIN PANEL</h2>
 
 ${USERS.map((u,i)=>`
-<div style="text-align:left;margin:8px 0">
+<div style="margin:6px;background:#222;padding:8px;border-radius:8px">
 ${u.name} - ${u.active?"ACTIF":"BLOQUÉ"}
 
 <button onclick="toggleUser(${i})"
-style="float:right;background:#ff5a00;border:none;color:#fff;padding:5px;border-radius:6px">
-toggle
+style="float:right;background:${u.active?'red':'green'};border:none;color:#fff;padding:5px;border-radius:6px">
+Action
 </button>
 </div>
 `).join("")}
@@ -512,18 +498,17 @@ toggle
 
 </div>
 </div>
-`;
-
-document.body.insertAdjacentHTML("beforeend",html);
-}
-
-function toggleUser(i){
-USERS[i].active = !USERS[i].active;
-openAdmin();
+`);
 }
 
 function closeAdmin(){
-document.querySelector(".popup.adminPanel")?.remove();
+$("adminBox")?.remove();
+}
+
+function toggleUser(i){
+USERS[i].active=!USERS[i].active;
+$("adminBox")?.remove();
+openAdmin();
 }
 
 /* RENDER */
@@ -532,96 +517,83 @@ function render(){
 $("content").innerHTML="";
 
 SERIES.forEach(s=>{
-  s.seasons.forEach((se,i)=>{
+s.seasons.forEach((se,i)=>{
 
-    let d=document.createElement("div");
-    d.className="season";
-    d.innerHTML=`<h2>${s.title} S${i+1}</h2><div class="episodes"></div>`;
+let d=document.createElement("div");
+d.className="season";
+d.innerHTML=`<h2>${s.title} S${i+1}</h2><div class="episodes"></div>`;
 
-    let box=d.querySelector(".episodes");
+let box=d.querySelector(".episodes");
 
-    se.forEach((v, index)=>{
-      let c=document.createElement("div");
-      c.className="card";
-
-      // 🔥 NUMÉRO AUTOMATIQUE
-      c.innerText = "Episode " + (index + 1);
-
-      c.onclick=()=>play(v);
-      box.appendChild(c);
-    });
-
-    $("content").appendChild(d);
-
-  });
+se.forEach((v,index)=>{
+let c=document.createElement("div");
+c.className="card";
+c.innerText="Episode "+(index+1);
+c.onclick=()=>play(v);
+box.appendChild(c);
 });
+
+$("content").appendChild(d);
+
+});
+});
+}
+
+/* VIDEO */
+function play(u){
+$("player").style.display="flex";
+$("frame").src=u.includes("youtu")
+?"https://www.youtube.com/embed/"+u.split("/").pop().split("?")[0]
+:u;
+}
+
+function closePlayer(){
+$("player").style.display="none";
+$("frame").src="";
 }
 
 /* SEARCH */
 function searchVideos(){
-
-let v = $("search").value.toLowerCase();
+let v=$("search").value.toLowerCase();
 
 document.querySelectorAll(".card").forEach(c=>{
-c.style.display = c.innerText.toLowerCase().includes(v) ? "block" : "none";
+c.style.display=c.innerText.toLowerCase().includes(v)?"block":"none";
 });
 }
+
+/* NAV */
+function go(u){window.open(u,"_blank");}
 
 /* WHATSAPP */
 function openWhatsApp(){
 
-let msg =
-`Nom: ${$("name").value}
-Code: ${$("code").value}`;
+let msg=`Nom:${$("name").value}\nCode:${$("code").value}`;
 
-window.open(
-"https://wa.me/237670035609?text=" + encodeURIComponent(msg),
-"_blank"
-);
+window.open("https://wa.me/237670035609?text="+encodeURIComponent(msg),"_blank");
 }
 
-function go(u){window.open(u,"_blank");}
+/* LISTE VIDEO */
 function openVideoList(){
 
-let html = `
-<div class="popup">
-  <div class="box" style="max-height:80vh;overflow:auto">
-
-    <h2>📺 LISTE VIDÉOS</h2>
-`;
+let html=`<div class="popup"><div class="box"><h2>📺 LISTE</h2>`;
 
 SERIES.forEach(s=>{
-  s.seasons.forEach((se,i)=>{
+s.seasons.forEach((se,i)=>{
+html+=`<h3>${s.title} S${i+1}</h3>`;
 
-    html += `<h3 style="color:#ff5a00;text-align:left;margin-top:10px">
-      ${s.title} S${i+1}
-    </h3>`;
-
-    se.forEach((v,index)=>{
-      html += `
-      <div onclick="play('${v}')"
-      style="padding:8px;margin:5px 0;background:#222;border-radius:8px;cursor:pointer">
-        Episode ${index+1}
-      </div>`;
-    });
-
-  });
+se.forEach((v,i2)=>{
+html+=`<div onclick="play('${v}')" style="padding:5px;background:#222;margin:5px;border-radius:6px">
+Episode ${i2+1}</div>`;
+});
+});
 });
 
-html += `
-    <button class="btn loginBtn" onclick="closeVideoList()">FERMER</button>
-  </div>
-</div>
-`;
+html+=`<button class="btn loginBtn" onclick="this.parentNode.parentNode.remove()">FERMER</button></div></div>`;
 
-document.body.insertAdjacentHTML("beforeend", html);
+document.body.insertAdjacentHTML("beforeend",html);
 }
-function closeVideoList(){
-  document.querySelector(".popup:last-of-type")?.remove();
-}
+
 </script>
-<footer class="footer">
-  Lesfacilitateurs — Tous droits réservés © 2026
-</footer>
+
 </body>
 </html>
