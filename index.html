@@ -198,6 +198,34 @@ font-size:13px;
 #headerScroll::-webkit-scrollbar{
 display:none;
 }
+#bannerBar{
+position:fixed;
+bottom:40px; /* juste au-dessus du footer */
+left:0;
+right:0;
+height:35px;
+background:#0a0a0a;
+overflow:hidden;
+display:flex;
+align-items:center;
+border-top:1px solid #222;
+z-index:50;
+}
+
+.bannerTrack{
+display:inline-block;
+white-space:nowrap;
+padding-left:100%;
+animation:scrollBanner 18s linear infinite;
+color:#ff5a00;
+font-weight:bold;
+font-size:13px;
+}
+
+@keyframes scrollBanner{
+0%{transform:translateX(0);}
+100%{transform:translateX(-100%);}
+}
 </style>
 </head>
 
@@ -287,6 +315,15 @@ font-weight:bold;
 
 
 <div id="content"></div>
+<div id="bannerBar">
+  <div class="bannerTrack">
+    🔥 pour vos annonces et spot publicitaire contact adminwhat's:+237670035609• appel :+237656050097
+    ⚡KOMA LIVE la chaîne du divertissement• 
+    🎬 KOMA LIVE : publicité , marketing, dédicace, promotion commander  vos séries et films préférés un seul contact What's : +237670035609• 
+    💥 Nouveaux épisodes ajoutés chaque semaine • 
+    📺 KOMA LIVE 2026 • 
+  </div>
+</div>
 
 <div class="footer">
 Lesfacilitateurs — Tous droits réservés © 2026
