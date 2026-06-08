@@ -124,12 +124,26 @@ z-index:999;
 }
 
 .box{
-width:90%;max-width:340px;
-padding:20px;border-radius:16px;
+width:90%;
+max-width:340px;
+max-height:80vh;
 background:linear-gradient(135deg,#111,#1b1b1b);
-text-align:center;
+border-radius:16px;
+display:flex;
+flex-direction:column;
+overflow:hidden;
+}
+.popup-content{
+max-height:60vh;
+overflow-y:auto;
+padding:15px;
 }
 
+.popup-footer{
+padding:10px;
+background:#111;
+border-top:1px solid #222;
+}
 .box h2{color:#ff5a00}
 
 .box input{
@@ -160,6 +174,29 @@ justify-content:center;
 align-items:center;
 color:#ff6a00;
 font-size:12px;
+}
+#headerScroll{
+display:flex;
+gap:8px;
+overflow-x:auto;
+white-space:nowrap;
+flex:1;
+margin-left:10px;
+}
+
+#headerScroll button{
+flex:0 0 auto;
+background:#ff5a00;
+border:none;
+color:white;
+padding:6px 12px;
+border-radius:20px;
+cursor:pointer;
+font-size:13px;
+}
+
+#headerScroll::-webkit-scrollbar{
+display:none;
 }
 </style>
 </head>
@@ -221,7 +258,12 @@ loading="lazy">
 <div style="display:flex;align-items:center;gap:10px">
 🔥 KOMA LIVE
 </div>
-
+<div id="headerScroll">
+  <button onclick="openLink('https://youtube.com')">YouTube</button>
+  <button onclick="openLink('https://facebook.com')">Facebook</button>
+  <button onclick="openLink('https://wa.me/237670035609')">WhatsApp</button>
+  <button onclick="openLink('https://google.com')">Google</button>
+</div>
 <div style="display:flex;align-items:center;gap:8px">
 
 <button onclick="openVideoList()"
@@ -264,7 +306,7 @@ const USERS = [
     name: "koma",
     code: "x",
     active: true,
-    expire: "2026-06-08T10:30:00" // 👈 TU PROLONGES ICI
+    expire: "2026-06-08T13:30:00" // 👈 TU PROLONGES ICI
   }
 ];
 
@@ -697,81 +739,76 @@ function openVideoList(){
 let html = `
 <div class="popup" id="videoPopup">
 
-<div class="box" style="
-max-height:80vh;
-overflow:auto;
-">
+  <div class="box">
 
-<h2>📺 LISTE DES VIDÉOS</h2>
+    <!-- zone scroll -->
+    <div class="popup-content">
+
+      <h2>📺 LISTE DES VIDÉOS</h2>
 `;
 
 SERIES.forEach(s=>{
 
-s.seasons.forEach((se,i)=>{
+  s.seasons.forEach((se,i)=>{
 
-html += `
-<h3 style="
-color:#00e5ff;
-margin-top:15px;
-text-align:left;
-">
-${s.title} S${i+1}
-</h3>
-`;
+    html += `
+    <h3 style="
+      color:#00e5ff;
+      margin-top:15px;
+      text-align:left;
+    ">
+      ${s.title} S${i+1}
+    </h3>
+    `;
 
-se.forEach((v,j)=>{
+    se.forEach((v,j)=>{
 
-html += `
-<div onclick="playFromList('${v}')"
+      html += `
+      <div onclick="playFromList('${v}')"
+      style="
+        padding:12px;
+        background:#222;
+        margin-top:8px;
+        border-radius:10px;
+        cursor:pointer;
+        text-align:left;
+      ">
+        ▶ Episode ${j+1}
+      </div>
+      `;
 
-style="
-padding:12px;
-background:#222;
-margin-top:8px;
-border-radius:10px;
-cursor:pointer;
-text-align:left;
-">
+    });
 
-▶ Episode ${j+1}
-
-</div>
-`;
-
-});
-
-});
+  });
 
 });
 
 html += `
+    </div>
 
-<button onclick="closeVideoList()"
+    <!-- footer FIXE -->
+    <div class="popup-footer">
+      <button onclick="closeVideoList()"
+      style="
+        width:100%;
+        padding:12px;
+        background:#ff5a00;
+        border:none;
+        color:white;
+        border-radius:10px;
+        cursor:pointer;
+        font-weight:bold;
+      ">
+        FERMER
+      </button>
+    </div>
 
-style="
-margin-top:20px;
-padding:12px;
-width:100%;
-background:#ff5a00;
-border:none;
-color:white;
-border-radius:10px;
-cursor:pointer;
-font-weight:bold;
-">
-
-FERMER
-
-</button>
-
-</div>
+  </div>
 </div>
 `;
 
 document.body.insertAdjacentHTML("beforeend", html);
-
 }
-
 /* =========================
    FERMER POPUP
 ========================= */
@@ -799,6 +836,9 @@ play(url);
 window.onload=()=>{
   $("mainLoginBtn").onclick=login;
 };
+function openLink(url){
+  window.open(url, "_blank");
+}
 </script>
 
 </body>
