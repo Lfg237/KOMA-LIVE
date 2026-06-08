@@ -59,13 +59,45 @@ overflow:auto;padding:10px;
 }
 
 .season{margin-bottom:20px}
-.season h2{color:#ff6a00}
-.episodes{display:flex;gap:10px;overflow:auto}
+.season h2{
+  color:#00e5ff;
+  font-size:18px;
+  margin-bottom:10px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.episodes{
+display:flex;
+gap:10px;
+overflow-x:auto;
+padding-bottom:10px;
+scroll-behavior:smooth;
+}
 
 .card{
-min-width:180px;background:#111;
-padding:10px;border-radius:10px;
-cursor:pointer;transition:.2s;
+min-width:160px;
+flex:0 0 auto;
+}
+
+/* cache scrollbar (optionnel) */
+.episodes::-webkit-scrollbar{
+  display:none;
+}
+.card{
+  min-width:160px;
+  flex:0 0 auto;
+  background:linear-gradient(135deg,#111,#1f1f1f);
+  padding:12px;
+  border-radius:12px;
+  cursor:pointer;
+  text-align:center;
+  transition:0.2s;
+}
+
+.card:hover{
+  transform:scale(1.05);
+  background:#ff5a00;
 }
 .card:hover{transform:scale(1.05)}
 
@@ -75,8 +107,12 @@ background:rgba(0,0,0,.95);
 display:none;justify-content:center;
 align-items:center;z-index:99;
 }
-.player iframe{width:90%;height:80%;border:none}
-
+.player iframe{
+width:100%;
+height:100%;
+border:none;
+background:#000;
+}
 /* POPUP */
 .popup{
 position:fixed;inset:0;
@@ -110,7 +146,6 @@ cursor:pointer;
 }
 
 .loginBtn{background:#ff5a00;color:#fff}
-.adminBtn{background:#444;color:#fff}
 .waBtn{background:#25D366;color:#fff}
 
 .footer{
@@ -130,6 +165,43 @@ font-size:12px;
 </head>
 
 <body>
+	<!-- PLAYER -->
+<div id="player" class="player">
+
+<button onclick="closePlayer()" 
+style="
+position:absolute;
+top:15px;
+right:15px;
+z-index:1000;
+background:#ff5a00;
+border:none;
+padding:10px;
+border-radius:8px;
+color:#fff;
+cursor:pointer;
+">
+← Retour
+</button>
+
+<iframe
+id="frame"
+allowfullscreen
+allow="autoplay; encrypted-media"
+referrerpolicy="origin"
+loading="lazy">
+</iframe>
+
+</div>
+  </button>
+
+  <iframe
+id="frame"
+allowfullscreen
+allow="autoplay; encrypted-media"
+referrerpolicy="no-referrer"
+loading="lazy">
+</iframe>
 
 <!-- LOGIN -->
 <div id="login" class="popup">
@@ -137,88 +209,68 @@ font-size:12px;
     <h2>🔥 ACCÈS KOMA LIVE</h2>
 
     <input id="name" placeholder="Nom">
-    <input id="code" placeholder="Code utilisateur / admin">
+    <input id="code" placeholder="Code utilisateur">
 
     <button class="btn loginBtn" id="mainLoginBtn">ENTRER</button>
-    <button class="btn adminBtn" onclick="admin()">ADMIN</button>
     <button class="btn waBtn" onclick="openWhatsApp()">💬 WhatsApp</button>
   </div>
 </div>
 
 <header>
-<div>🔥 KOMA LIVE</div>
-<div id="timer">00:00</div>
 
-<div>
-<button onclick="openVideoList()" style="background:#444;color:#fff;border:none;padding:6px 10px;border-radius:8px">
+<div style="display:flex;align-items:center;gap:10px">
+🔥 KOMA LIVE
+</div>
+
+<div style="display:flex;align-items:center;gap:8px">
+
+<button onclick="openVideoList()"
+style="
+background:#ff5a00;
+border:none;
+color:#fff;
+padding:7px 12px;
+border-radius:10px;
+cursor:pointer;
+font-weight:bold;
+">
 📺 Vidéos
 </button>
 
-<button onclick="admin()" style="background:#ff5a00;color:#fff;border:none;padding:6px 10px;border-radius:8px">
-🔐 Admin
-</button>
+<div id="timer">00:00</div>
+
 </div>
+
 </header>
 
-<div id="topBar">
-<button onclick="go('https://youtube.com')">YT</button>
-<button onclick="go('https://facebook.com')">FB</button>
-<button onclick="go('https://tiktok.com')">TT</button>
-</div>
-
-<div id="searchBar">
-<input id="search" onkeyup="searchVideos()" placeholder="Rechercher">
-</div>
 
 <div id="content"></div>
 
-<!-- PLAYER -->
-<div class="player" id="player">
-  <button onclick="closePlayer()" 
-  style="position:absolute;top:20px;right:20px;background:#ff5a00;border:none;padding:10px;border-radius:8px;color:#fff;z-index:9999">
-  ← Retour
-  </button>
-
-  <iframe id="frame"></iframe>
-</div>
-
-<!-- FOOTER -->
 <div class="footer">
 Lesfacilitateurs — Tous droits réservés © 2026
 </div>
-<script>
-/* ===== FIX CORE ===== */
-const $ = (id)=>document.getElementById(id);
 
-const ADMIN = "233";
-const SESSION_KEY = "koma_session";
-const DURATION_MINUTES = 1;
+<script>
+const $ = (id)=>document.getElementById(id);
 
 let currentUser=null;
 let timerInterval=null;
 
-const USERS=[{name:"kono",code:"x",time:1,active:true}];
+const SESSION_KEY="koma_session";
 
-/* ===== ADMIN MODE STATE ===== */
-let adminMode = false;
-/* ===== BUTTON FIX ===== */
-window.addEventListener("DOMContentLoaded",()=>{
+/* USERS */
+const USERS = [
+  {
+    name: "koma",
+    code: "x",
+    active: true,
+    expire: "2026-06-08T10:30:00" // 👈 TU PROLONGES ICI
+  }
+];
 
-$("mainLoginBtn").addEventListener("click",()=>{
-
-if(adminMode){
-checkAdmin();
-}else{
-login();
-}
-
-});
-
-});
-
-/* ===== SERIES ===== */
+/* SERIES */
 const SERIES=[{
-title: "Cabo",
+  title: "Cabo",
     seasons:[[
 "https://youtu.be/Rfc3Hsfidk8?si=3SlfVugULvmOAaoa",
 "https://youtu.be/5Otl_F2GNII?si=-PvMZygxVgBU-OKJ",
@@ -393,249 +445,345 @@ title: "Cabo",
   }
 ];
 
-/* ===== LOGIN ===== */
+
+/* LOGIN */
 function login(){
-const n=$("name").value.trim();
-const c=$("code").value.trim();
+  const n=$("name").value.trim();
+  const c=$("code").value.trim();
 
-const u=USERS.find(x=>x.name===n && x.code===c && x.active);
+  const u = USERS.find(x=>x.name===n && x.code===c);
 
-if(!u){
-alert("❌ Erreur login");
-return;
+  if(!u){
+    alert("❌ Erreur login");
+    return;
+  }
+
+  const now = new Date().getTime();
+  const expire = new Date(u.expire).getTime();
+
+  if(now > expire){
+    showBlocked();
+    return;
+  }
+
+  currentUser=u;
+  $("login").style.display="none";
+
+  startTimer(u);
+  render();
 }
 
-saveSession(u);
-afterLogin(u);
+/* 🔥 CHRONO AVEC DATE D'EXPIRATION */
+function startTimer(user){
+
+  const timer = $("timer");
+
+  function update(){
+
+    const now = new Date().getTime();
+    const expire = new Date(user.expire).getTime();
+
+    let diff = expire - now;
+
+    if(diff <= 0){
+      timer.textContent = "00:00";
+      showBlocked();
+      return;
+    }
+
+    let min = Math.floor(diff / 60000);
+    let sec = Math.floor((diff % 60000) / 1000);
+
+    timer.textContent =
+      String(min).padStart(2,'0') + ":" +
+      String(sec).padStart(2,'0');
+  }
+
+  update();
+  setInterval(update, 1000);
 }
-
-/* ===== SESSION ===== */
-function saveSession(u){
-const expiry = Date.now()+DURATION_MINUTES*60*1000;
-
-localStorage.setItem(SESSION_KEY,JSON.stringify({
-name:u.name,
-code:u.code,
-expiry
-}));
-}
-
-/* ===== AFTER LOGIN ===== */function afterLogin(u){
-    currentUser = u;
-
-    $("login").style.display = "none";
-
-    render();
-
-    startTimer(Date.now() + (u.time * 60 * 1000));
-}
-
-/* ===== AUTO LOGIN ===== */
-/* ===== BUTTON FIX ===== */
-
-/* ===== BUTTON FIX ===== */
-window.onload = function(){
-
-document.getElementById("mainLoginBtn").onclick = function(){
-
-if(adminMode){
-checkAdmin();
-}else{
-login();
-}
-
-};
-
-};
-/* ===== TIMER ===== */
-function startTimer(expiry){
-clearInterval(timerInterval);
-
-timerInterval=setInterval(()=>{
-let t=Math.floor((expiry-Date.now())/1000);
-
-if(t<=0){
-clearInterval(timerInterval);
-showBlocked();
-return;
-}
-
-$("timer").textContent=
-String(Math.floor(t/60)).padStart(2,'0')+":"+
-String(t%60).padStart(2,'0');
-
-},1000);
-}
-
-/* ===== BLOCK ===== */
+/* BLOCK */
+/* BLOCK */
 function showBlocked(){
-document.body.insertAdjacentHTML("beforeend",`
-<div class="popup">
-<div class="box">
-<h2>🔒 ACCÈS BLOQUÉ</h2>
-<button class="btn waBtn" onclick="openWhatsApp()">WhatsApp</button>
-</div>
-</div>
-`);
-}
 
-/* ===== ADMIN OPEN (FIX PRINCIPAL) ===== */
-function admin(){
+document.body.innerHTML = `
+<div style="
+color:white;
+text-align:center;
+padding:60px;
+font-family:Arial;
+">
 
-let code = prompt("Entrer le code admin");
+<h1 style="color:#ff5a00">
+🔒 ACCÈS EXPIRÉ
+</h1>
 
-if(code === ADMIN){
+<p style="margin-top:15px;font-size:16px;color:#ccc">
+Votre abonnement a expiré
+</p>
 
-openAdminPanel();
-
-}else{
-
-alert("❌ Code admin incorrect");
-
-}
-
-}
-
-/* ===== CHECK ADMIN ===== */
-function checkAdmin(){
-const c=$("code").value.trim();
-
-if(c!==ADMIN){
-alert("❌ Code admin incorrect");
-return;
-}
-
-$("login").style.display="none";
-openAdminPanel();
-}
-
-/* ===== RESET LOGIN ===== */
-function resetLogin(){
-
-
-
-$("login").querySelector("h2").innerText =
-"🔥 ACCÈS KOMA LIVE";
-
-$("name").style.display = "block";
-
-$("name").value = "";
-$("code").value = "";
-
-}
-
-/* ===== ADMIN PANEL ===== */
-function openAdminPanel(){
-
-document.getElementById("adminBox")?.remove();
-
-document.body.insertAdjacentHTML("beforeend",`
-<div class="popup" id="adminBox">
-<div class="box">
-
-<h2>🔐 ADMIN PANEL</h2>
-
-${USERS.map((u,i)=>`
-<div style="margin:6px;background:#222;padding:8px;border-radius:8px">
-${u.name} - ${u.active?"ACTIF":"BLOQUÉ"}
-
-<button onclick="toggleUser(${i})"
-style="float:right;background:${u.active?'red':'green'};border:none;color:#fff;padding:5px;border-radius:6px">
-Action
+<button onclick="renewAccess()"
+style="
+padding:14px 20px;
+background:#25D366;
+color:#fff;
+border:none;
+border-radius:12px;
+margin-top:20px;
+font-size:16px;
+cursor:pointer;
+font-weight:bold;
+">
+💬  Réabonnement ici
 </button>
-</div>
-`).join("")}
 
-<button class="btn loginBtn" onclick="closeAdmin()">FERMER</button>
-
-</div>
-</div>
-`);
+</div>`;
 }
 
-function closeAdmin(){
-document.getElementById("adminBox")?.remove();
-resetLogin();
+/* WHATSAPP RÉABONNEMENT */
+function renewAccess(){
+
+let msg =
+"Effectuez votre réabonnement en suivant ce lien et envoyé la capture merci❤️.%0A%0A👇👇%0Ahttps://helepmoney.vercel.app/?id=card1";
+
+window.open(
+"https://wa.me/237670035609?text=" + msg,
+"_blank"
+);
+
 }
 
-function toggleUser(i){
-USERS[i].active=!USERS[i].active;
-openAdminPanel();
-}
-
-/* ===== RENDER EPISODES ===== */
+/* RENDER */
 function render(){
-$("content").innerHTML="";
 
-SERIES.forEach(s=>{
-s.seasons.forEach((se,i)=>{
+  $("content").innerHTML="";
 
-let d=document.createElement("div");
-d.className="season";
-d.innerHTML=`<h2>${s.title} S${i+1}</h2><div class="episodes"></div>`;
+  SERIES.forEach(s=>{
 
-let box=d.querySelector(".episodes");
+    s.seasons.forEach((se,i)=>{
 
-se.forEach((v,index)=>{
-let c=document.createElement("div");
-c.className="card";
-c.innerText="Episode "+(index+1);
-c.onclick=()=>play(v);
-box.appendChild(c);
-});
+      /* bloc série */
+      let block=document.createElement("div");
+      block.className="season";
 
-$("content").appendChild(d);
+      /* titre série */
+      let title=document.createElement("h2");
+      title.textContent = s.title + " S" + (i+1);
 
-});
-});
+      /* conteneur horizontal */
+      let row=document.createElement("div");
+      row.className="episodes";
+
+      /* épisodes */
+      se.forEach((v,j)=>{
+
+        let div=document.createElement("div");
+        div.className="card";
+        div.textContent="Episode "+(j+1);
+
+        div.onclick=()=>play(v);
+
+        row.appendChild(div);
+
+      });
+
+      /* ajout */
+      block.appendChild(title);
+      block.appendChild(row);
+
+      $("content").appendChild(block);
+
+    });
+
+  });
+
 }
 
-/* ===== VIDEO PLAYER ===== */
-function play(u){
+/* PLAYER UNIVERSEL */
+function play(url){
+
 $("player").style.display="flex";
-$("frame").src=u;
+
+$("frame").src = convert(url);
+
 }
 
 function closePlayer(){
+  $("player").style.display="none";
+  $("frame").src="";
+}
+
+/* 🔥 CONVERTISSEUR YOUTUBE / TIKTOK / FACEBOOK */
+
+function convert(url){
+
+/* =========================
+   YOUTUBE
+========================= */
+if(url.includes("youtu.be/")){
+
+let id = url.split("youtu.be/")[1].split("?")[0];
+
+return "https://www.youtube.com/embed/" + id +
+"?autoplay=1&rel=0&modestbranding=1&controls=1";
+}
+
+if(url.includes("youtube.com/watch")){
+
+let id = url.split("v=")[1].split("&")[0];
+
+return "https://www.youtube.com/embed/" + id +
+"?autoplay=1&rel=0&modestbranding=1&controls=1";
+}
+
+/* =========================
+   TIKTOK
+========================= */
+if(url.includes("tiktok.com")){
+
+let match = url.match(/video\/(\d+)/);
+
+if(match){
+
+return "https://www.tiktok.com/embed/v2/" + match[1];
+}
+}
+
+/* =========================
+   FACEBOOK
+========================= */
+if(url.includes("facebook.com")){
+
+return "https://www.facebook.com/plugins/video.php?href="
++ encodeURIComponent(url)
++ "&show_text=0"
++ "&autoplay=true";
+}
+
+/* =========================
+   AUTRES
+========================= */
+return url;
+
+}
+
+function closePlayer(){
+
 $("player").style.display="none";
+
 $("frame").src="";
+
 }
-
-/* ===== SEARCH ===== */
-function searchVideos(){
-let v=$("search").value.toLowerCase();
-
-document.querySelectorAll(".card").forEach(c=>{
-c.style.display=c.innerText.toLowerCase().includes(v)?"block":"none";
-});
-}
-
-/* ===== WHATSAPP ===== */
-function openWhatsApp(){
-let msg=`Nom:${$("name").value}\nCode:${$("code").value}`;
-
-window.open("https://wa.me/237670035609?text="+encodeURIComponent(msg));
-}
-
-/* ===== VIDEO LIST ===== */
+/* =========================
+   LISTE DES VIDEOS
+========================= */
 function openVideoList(){
-let html=`<div class="popup"><div class="box"><h2>📺 LISTE</h2>`;
+
+let html = `
+<div class="popup" id="videoPopup">
+
+<div class="box" style="
+max-height:80vh;
+overflow:auto;
+">
+
+<h2>📺 LISTE DES VIDÉOS</h2>
+`;
 
 SERIES.forEach(s=>{
+
 s.seasons.forEach((se,i)=>{
-html+=`<h3>${s.title} S${i+1}</h3>`;
 
-se.forEach((v,i2)=>{
-html+=`<div onclick="play('${v}')" style="padding:5px;background:#222;margin:5px;border-radius:6px">
-Episode ${i2+1}</div>`;
-});
-});
+html += `
+<h3 style="
+color:#00e5ff;
+margin-top:15px;
+text-align:left;
+">
+${s.title} S${i+1}
+</h3>
+`;
+
+se.forEach((v,j)=>{
+
+html += `
+<div onclick="playFromList('${v}')"
+
+style="
+padding:12px;
+background:#222;
+margin-top:8px;
+border-radius:10px;
+cursor:pointer;
+text-align:left;
+">
+
+▶ Episode ${j+1}
+
+</div>
+`;
+
 });
 
-html+=`<button class="btn loginBtn" onclick="this.closest('.popup').remove()">FERMER</button></div></div>`;
+});
 
-document.body.insertAdjacentHTML("beforeend",html);
+});
+
+html += `
+
+<button onclick="closeVideoList()"
+
+style="
+margin-top:20px;
+padding:12px;
+width:100%;
+background:#ff5a00;
+border:none;
+color:white;
+border-radius:10px;
+cursor:pointer;
+font-weight:bold;
+">
+
+FERMER
+
+</button>
+
+</div>
+</div>
+`;
+
+document.body.insertAdjacentHTML("beforeend", html);
+
 }
+
+/* =========================
+   FERMER POPUP
+========================= */
+function closeVideoList(){
+
+let popup = document.getElementById("videoPopup");
+
+if(popup){
+popup.remove();
+}
+
+}
+
+/* =========================
+   PLAY DEPUIS LA LISTE
+========================= */
+function playFromList(url){
+
+closeVideoList();
+
+play(url);
+
+}
+/* INIT */
+window.onload=()=>{
+  $("mainLoginBtn").onclick=login;
+};
 </script>
 
 </body>
