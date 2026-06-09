@@ -783,6 +783,23 @@ return "https://www.facebook.com/plugins/video.php?href="
 + "&show_text=0"
 + "&autoplay=true";
 
+}, 
+/* =========================
+   ARCHIVE.ORG
+========================= */
+
+if(url.includes("archive.org/details/")){
+
+return url
+.replace("/details/","/embed/")
+.replace("#ia-carousel","");
+
+}
+
+if(url.includes("archive.org/embed/")){
+
+return url;
+
 }
 
 /* =========================
