@@ -425,7 +425,7 @@ const USERS = [
     name: "simo24",
     code: "s24",
     active: true,
-    expire: "2026-06-31T23:59:59"
+    expire: "2026-06-30T23:59:59"
   }
 ];
 
@@ -1000,35 +1000,41 @@ function render(){
 
     s.seasons.forEach((se,i)=>{
 
-      /* bloc série */
       let block=document.createElement("div");
       block.className="season";
 
-      /* titre série */
       let title=document.createElement("h2");
       title.textContent = s.title + " S" + (i+1);
 
-      /* conteneur horizontal */
       let row=document.createElement("div");
       row.className="episodes";
 
-      /* épisodes */
       se.forEach((v,j)=>{
 
-        let div=document.createElement("div");
-        div.className="card";
-        div.textContent="Episode "+(j+1);
+  let div=document.createElement("div");
+  div.className="card";
 
-        div.onclick=()=>play(v);
+  if(typeof v === "object"){
+
+    div.textContent = v.title || ("Episode "+(j+1));
+    div.onclick = ()=>play(v.url);
+
+  }else{
+
+    div.textContent = "Episode "+(j+1);
+    div.onclick = ()=>play(v);
+  }
+
+  row.appendChild(div);
+
+});
 
         row.appendChild(div);
 
       });
 
-      /* ajout */
       block.appendChild(title);
       block.appendChild(row);
-
       $("content").appendChild(block);
 
     });
@@ -1036,6 +1042,7 @@ function render(){
   });
 
 }
+
 
 /* PLAYER UNIVERSEL */
 function play(url){
