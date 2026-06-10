@@ -1177,26 +1177,30 @@ SERIES.forEach(s=>{
 
     se.forEach((v,j)=>{
 
-      html += `
-      <div onclick="playFromList('${v}')"
-      style="
-        padding:12px;
-        background:#222;
-        margin-top:8px;
-        border-radius:10px;
-        cursor:pointer;
-        text-align:left;
-      ">
-        ▶ Episode ${j+1}
-      </div>
-      `;
+let div=document.createElement("div");
+div.className="card";
 
-    });
+/* SI OBJET */
+if(typeof v === "object"){
 
-  });
+div.textContent = v.title || ("Episode " + (j+1));
+
+div.onclick = ()=>play(v.url);
+
+}
+
+/* SI SIMPLE LIEN */
+else{
+
+div.textContent = "Episode " + (j+1);
+
+div.onclick = ()=>play(v);
+
+}
+
+row.appendChild(div);
 
 });
-
 html += `
     </div>
 
