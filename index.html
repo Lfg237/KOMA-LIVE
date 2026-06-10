@@ -3,889 +3,799 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>KOMA LIVE TV</title>
+<title>KOMA LIVE</title>
 
 <style>
 body{
-margin:0;
-font-family:Arial,sans-serif;
-color:#fff;
-background:
-linear-gradient(180deg,#050505,#0d0d0d,#111);
-overflow-x:hidden;
-overflow-y:auto;
+  margin:0;
+  font-family:Arial,sans-serif;
+  color:#fff;
+  padding-bottom:100px;
+  background:linear-gradient(180deg,#050505,#0b0b0b,#111);
+  overflow-x:hidden;
+  overflow-y:auto;
 }
 
-/* EFFET CINÉMA SOMBRE */
-body::before{
-content:"";
+/* HEADER */
+header{
 position:fixed;
-inset:0;
-
-background:
-radial-gradient(circle at 20% 20%,
-rgba(255,90,0,.12),
-transparent 35%),
-
-radial-gradient(circle at 80% 30%,
-rgba(255,0,0,.08),
-transparent 40%),
-
-radial-gradient(circle at 50% 90%,
-rgba(255,120,0,.05),
-transparent 45%),
-
-linear-gradient(
-180deg,
-rgba(0,0,0,.3),
-rgba(0,0,0,.8)
-);
-
-filter:blur(70px);
-
-animation:bgMove 12s ease-in-out infinite alternate;
-
-z-index:-1;
+top:0;
+left:0;
+right:0;
+height:90px;
+background:#0a0a0a;
+display:flex;
+align-items:center;
+gap:10px;
+padding:5px;
+z-index:10;
 }
 
-/* ANIMATION */
-@keyframes bgMove{
-
-0%{
-transform:scale(1) translateY(0);
+.logo{
+font-weight:bold;
+white-space:nowrap;
 }
 
-100%{
-transform:scale(1.08) translateY(20px);
+#chrono{
+background:#111;
+padding:4px 8px;
+border-radius:6px;
+color:#ff5a00;
+font-size:12px;
+white-space:nowrap;
 }
 
+/* SCROLL LINKS */
+#topLinks{
+flex:1;
+overflow-x:auto;
+white-space:nowrap;
+cursor:grab;
 }
-
-
-
-@keyframes move{to{transform:translateY(20px) scale(1.1)}}
-
-header{
-position:fixed;top:0;left:0;right:0;height:55px;
-background:#0a0a0a;display:flex;
-justify-content:space-between;align-items:center;
-padding:0 10px;z-index:10;
-}
-header{
-background:rgba(10,10,10,.92);
-backdrop-filter:blur(12px);
-border-bottom:1px solid rgba(255,255,255,.06);
-}
-
-#topBar{
-position:fixed;top:55px;left:0;right:0;
-display:flex;gap:6px;overflow:auto;
-padding:6px;background:#0b0b0b;
-}
-
-#topBar button{
-background:#ff5a00;border:none;color:#fff;
-padding:6px 10px;border-radius:10px;
-}
-
-#searchBar{
-position:fixed;top:100px;left:0;right:0;
-padding:8px;background:#0a0a0a;
-}
-
-#searchBar input{
-width:100%;padding:10px;border:none;
-border-radius:10px;background:#111;color:#fff;
-}
-
-#content{
-position:absolute;top:160px;bottom:0;left:0;right:0;
-overflow:auto;padding:10px;
-}
-
-.season h2{
-  color:#ffffff;
-  font-size:20px;
-  font-weight:bold;
-  margin-bottom:12px;
-  text-transform:uppercase;
-  letter-spacing:1px;
-}
-
-.episodes{
+#track{
 display:flex;
 gap:10px;
-overflow-x:auto;
-padding-bottom:10px;
-scroll-behavior:smooth;
+padding:5px;
 }
 
-.card{
-min-width:160px;
-flex:0 0 auto;
-}
-.card{
-background:
-linear-gradient(
-145deg,
-#121212,
-#1b1b1b
-);
-
-border:1px solid rgba(255,255,255,.05);
-
-box-shadow:
-0 0 10px rgba(0,0,0,.5);
-
-color:#fff;
-}
-/* cache scrollbar (optionnel) */
-.episodes::-webkit-scrollbar{
-  display:none;
-}
-.card{
-  min-width:160px;
-  flex:0 0 auto;
-  background:linear-gradient(135deg,#111,#1f1f1f);
-  padding:12px;
-  border-radius:12px;
-  cursor:pointer;
-  text-align:center;
-  transition:0.2s;
-}
-
-.card:hover{
-  transform:scale(1.05);
-  background:#ff5a00;
-}
-.card:hover{transform:scale(1.05)}
-
-.player{
-position:fixed;inset:0;
-background:rgba(0,0,0,.95);
-display:none;justify-content:center;
-align-items:center;z-index:99;
-}
-.player iframe{
-width:100%;
-height:100%;
+#track button{
+background:#ff5a00;
 border:none;
-background:#000;
-}
-/* POPUP */
-.popup{
-position:fixed;inset:0;
-display:flex;justify-content:center;
-align-items:center;
-background:rgba(0,0,0,.6);
-backdrop-filter:blur(10px);
-z-index:999;
+color:#fff;
+padding:6px 10px;
+border-radius:20px;
+cursor:pointer;
+font-size:12px;
+white-space:nowrap;
 }
 
-.box{
-width:90%;
-max-width:340px;
-max-height:80vh;
-background:linear-gradient(135deg,#111,#1b1b1b);
-border-radius:16px;
+/* BUTTONS */
+.actions{
 display:flex;
-flex-direction:column;
-overflow:hidden;
-}
-.popup-content{
-max-height:60vh;
-overflow-y:auto;
-padding:15px;
+gap:5px;
 }
 
-.popup-footer{
-padding:10px;
-background:#111;
-border-top:1px solid #222;
-}
-.box h2{color:#ff5a00}
-
-.box input{
-width:100%;padding:10px;margin-top:8px;
-border:none;border-radius:8px;
-background:#222;color:#fff;
-}
-
-.btn{
-width:100%;padding:10px;margin-top:10px;
-border:none;border-radius:10px;
-font-weight:bold;
+.mini-btn{
+background:#ff5a00;
+border:none;
+color:#fff;
+width:38px;
+height:38px;
+border-radius:8px;
 cursor:pointer;
 }
 
-.loginBtn{background:#ff5a00;color:#fff}
-.waBtn{background:#25D366;color:#fff}
+/* CONTENT */
 
-.footer{
+#app{
+margin-top:95px;
+padding-bottom:120px; /* IMPORTANT */
+padding-left:10px;
+padding-right:10px;
+}
+
+footer{
 position:fixed;
 bottom:0;
 left:0;
 right:0;
 height:40px;
 background:#0a0a0a;
+z-index:9999;
 display:flex;
 justify-content:center;
 align-items:center;
-color:#ff6a00;
 font-size:12px;
 }
-#headerScroll{
+
+.series{
+margin-bottom:20px;
+}
+
+.episodes{
 display:flex;
-gap:8px;
+gap:10px;
 overflow-x:auto;
-white-space:nowrap;
-flex:1;
-margin-left:10px;
 }
 
-#headerScroll button{
-flex:0 0 auto;
-background:#ff5a00;
-border:none;
-color:white;
-padding:6px 12px;
-border-radius:20px;
+.episode{
+min-width:140px;
+background:#111;
+padding:10px;
+border-radius:10px;
 cursor:pointer;
-font-size:13px;
 }
 
-#headerScroll::-webkit-scrollbar{
-display:none;
-}
-#bannerBar{
+/* PLAYER */
+.player{
 position:fixed;
-bottom:40px; /* juste au-dessus du footer */
+inset:0;
+background:#000;
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:99;
+}
+
+.player iframe{
+width:100%;
+height:100%;
+border:none;
+}
+
+/* MARQUEE */
+.marquee{
+position:fixed;
+bottom:40px;
 left:0;
 right:0;
-height:35px;
-background:#0a0a0a;
-overflow:hidden;
+height:40px;
+background:#111;
 display:flex;
 align-items:center;
-border-top:1px solid #222;
+padding:5px;
+overflow:hidden;
 z-index:50;
 }
 
-.bannerTrack{
-display:inline-block;
+.marquee-text{
 white-space:nowrap;
-padding-left:100%;
-animation:scrollBanner 38s linear infinite;
-color:white;
-font-weight:bold;
-font-size:13px;
+animation:move 12s linear infinite;
 }
 
-@keyframes scrollBanner{
-0%{transform:translateX(0);}
-100%{transform:translateX(-100%);}
+@keyframes move{
+0%{transform:translateX(100%)}
+100%{transform:translateX(-100%)}
 }
-#content{
-padding-bottom:120px;
-}
-.popup-content{
-overflow-y:auto;
-max-height:65vh;
-}
-
-.popup-footer{
-position:sticky;
-bottom:0;
+.marquee{
+position:fixed;
+bottom:40px;
+left:0;
+right:0;
+height:40px;
 background:#111;
-padding:10px;
+display:flex;
+align-items:center;
+padding:0 10px;
+gap:10px;
+z-index:1000;
 }
+
+.marquee-text{
+white-space:nowrap;
+animation:move 12s linear infinite;
+flex:1;
+}
+
+
+.wa-btn{
+background:#25D366;
+color:#fff;
+border:none;
+padding:8px 14px;
+border-radius:25px;
+font-size:13px;
+font-weight:bold;
+cursor:pointer;
+white-space:nowrap;
+flex-shrink:0;
+
+/* 🔥 IMPORTANT POUR VISIBILITÉ */
+z-index:9999;
+box-shadow:0 0 10px rgba(0,0,0,0.5);
+border:2px solid #fff;
+}
+.marquee{
+  position:fixed;
+  bottom:40px;
+  left:0;
+  right:0;
+  height:45px;
+  background:#111;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 10px;
+  gap:10px;
+  z-index:1000;
+  overflow:hidden;
+}
+
+.marquee-text{
+  white-space:nowrap;
+  flex:1;
+  animation:move 12s linear infinite;
+}
+
+@keyframes move{
+  0%{transform:translateX(100%)}
+  100%{transform:translateX(-100%)}
+}
+
+.wa-btn{
+  background:#25D366;
+  color:#fff;
+  border:none;
+  padding:8px 12px;
+  border-radius:25px;
+  font-size:13px;
+  font-weight:bold;
+  white-space:nowrap;
+  flex-shrink:0;
+  z-index:9999;
+}
+
+.marquee{
+  position:fixed;
+  bottom:40px;
+  left:0;
+  right:0;
+  height:45px;
+  background:#111;
+  display:flex;
+  align-items:center;
+  padding:0 10px;
+  gap:10px;
+  z-index:1000;
+  overflow:hidden;
+}
+
+/* texte défilant */
+.marquee-text{
+  flex:1;
+  min-width:0;
+  white-space:nowrap;
+  animation:move 12s linear infinite;
+}
+
+/* bouton TOUJOURS visible */
+.wa-btn{
+  flex:0 0 auto;
+  background:#25D366;
+  color:#fff;
+  border:none;
+  padding:8px 12px;
+  border-radius:20px;
+  font-size:13px;
+  font-weight:bold;
+  white-space:nowrap;
+  position:relative;
+  right:0;
+}
+
+/* animation */
+@keyframes move{
+  0%{transform:translateX(100%)}
+  100%{transform:translateX(-100%)}
+}
+
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.8);
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:9999;
+}
+
+.modal-box{
+background:#111;
+width:90%;
+max-width:350px;
+border-radius:15px;
+padding:15px;
+color:#fff;
+animation:pop .2s ease;
+}
+
+@keyframes pop{
+from{transform:scale(0.8);opacity:0}
+to{transform:scale(1);opacity:1}
+}
+
+.modal h2{
+text-align:center;
+margin-bottom:10px;
+}
+
+.list{
+display:flex;
+flex-direction:column;
+gap:10px;
+max-height:300px;
+overflow:auto;
+padding-right:5px;
+}
+
+.item{
+background:#1a1a1a;
+padding:10px;
+border-radius:10px;
+cursor:pointer;
+transition:0.2s;
+}
+
+.item:hover{
+background:#ff5a00;
+transform:scale(1.02);
+}
+
+.video{
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+.close{
+width:100%;
+margin-top:10px;
+padding:10px;
+border:none;
+background:red;
+color:#fff;
+border-radius:10px;
+cursor:pointer;
+}
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.8);
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:9999;
+}
+
+.modal-box{
+background:#111;
+width:90%;
+max-width:350px;
+border-radius:15px;
+padding:15px;
+color:#fff;
+}
+
+.list{
+display:flex;
+flex-direction:column;
+gap:10px;
+max-height:300px;
+overflow:auto;
+}
+
+.item{
+background:#1a1a1a;
+padding:10px;
+border-radius:10px;
+cursor:pointer;
+}
+
+.video:hover{
+background:#ff5a00;
+}
+#app{
+  margin-top:100px;
+  padding:10px;
+  display:block;
+  min-height:300px;
+}
+
+.series{
+  margin-bottom:30px;
+}
+
+.episodes{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  padding:10px;
+  scroll-snap-type:x mandatory;
+}
+
+.episode{
+  min-width:160px;
+  flex-shrink:0;
+  scroll-snap-align:start;
+}
+#app{
+  display:block;
+  min-height:200px;
+  color:#fff;
+}
+
 </style>
 </head>
 
 <body>
-	<!-- PLAYER -->
-<div id="player" class="player">
-
-<button onclick="closePlayer()" 
-style="
-position:absolute;
-top:15px;
-right:15px;
-z-index:1000;
-background:#ff5a00;
-border:none;
-padding:10px;
-border-radius:8px;
-color:#fff;
-cursor:pointer;
-">
-← Retour
-</button>
-
-<iframe
-id="frame"
-allowfullscreen
-allow="autoplay; encrypted-media"
-referrerpolicy="origin"
-loading="lazy">
-</iframe>
-
-</div>
-  
-
-<!-- LOGIN -->
-<div id="login" class="popup">
-  <div class="box">
-    <h2>🔥 ACCÈS KOMA LIVE TV</h2>
-
-    <input id="name" placeholder="Nom">
-    <input id="code" placeholder="Code utilisateur">
-
-    <button class="btn loginBtn" id="mainLoginBtn">ENTRER</button>
-    <button class="btn waBtn" onclick="openWhatsApp()">💬 WhatsApp</button>
-  </div>
-</div>
+	
+	
 
 <header>
 
-<div style="display:flex;align-items:center;gap:10px">
-🔥 KOMA LIVE TV
+<div class="logo">🔥 KOMA LIVE TV</div>
+
+<div id="chrono">0h0m0s</div>
+
+<div id="topLinks">
+<div id="track"></div>
 </div>
-<div id="headerScroll">
- <button onclick="openLink('https://lesfacilitateurs.vercel.app/')">accueil</button>
-  <button onclick="openLink('https://helepmoney.vercel.app/?id=card1')">helepmoney</button>
-  <button onclick="openLink('https://workshopkmer.vercel.app/#job1')">emploi</button>
-</div>
-<div style="display:flex;align-items:center;gap:8px">
 
-<button onclick="openVideoList()"
-style="
-background:#ff5a00;
-border:none;
-color:#fff;
-padding:7px 12px;
-border-radius:10px;
-cursor:pointer;
-font-weight:bold;
-">
-📺 Vidéos
-</button>
-
-<div id="timer">00:00</div>
-
+<div class="actions">
+<button class="mini-btn" onclick="openUsers()">👥</button>
+<button class="mini-btn" onclick="openVideoList()">📺</button>
 </div>
 
 </header>
+<div id="app"></div>
+<div class="marquee">
 
-
-<div id="content"></div>
-<div id="bannerBar">
-  <div class="bannerTrack">
-    🔥 pour vos annonces et spot publicitaire contact admin what's:+237670035609• appel :+237656050097
-    ⚡KOMA LIVE TV la chaîne du divertissement• 
-    🎬 KOMA LIVE : publicité , marketing, dédicace, promotion commander  vos séries et films préférés un seul contact   What's : +237670035609• 
-    💥 Nouvel épisode ajouté chaque semaine • 
-    📺 KOMA LIVE TV 2026 • 
+  <div class="marquee-text">
+    KOMA LIVE TV - CONTACT ADMIN WHATSAPP
   </div>
-</div>
-
-<div class="footer">
-Lesfacilitateurs — Tous droits réservés © 2026
-</div>
-
+<footer>
+  Lesfacilitateurs groupe © 2026 - Tout droit réservé
+</footer>
 <script>
-const $ = (id)=>document.getElementById(id);
-
-let currentUser=null;
-let timerInterval=null;
-
-const SESSION_KEY="koma_session";
-
-/* USERS */
+	console.log("JS OK - KOMA LIVE chargé");
 const USERS = [
-  {
-    name: "koma",
-    code: "x",
-    active: true,
-    expire: "2027-12-31T23:59:59"
-  },
-  {
-    name: "ludovic",
-    code: "2x",
-    active: true,
-    expire: "2027-12-31T23:59:59"
-  },
-{
-    name: "elect",
-    code: "2x",
-    active: true,
-    expire: "2026-12-30T23:59:59"
-  },
-{
-    name: "simo24",
-    code: "s24",
-    active: true,
-    expire: "2026-06-30T23:59:59"
-  }
+	
+  { name: "kamo", code: "x", expire: "01-01-2030", role: "admin" },
+  { name: "elect", code: "2xx", expire: "15-07-2026", role: "user" },
+    { name: "lufovic", code: "2x", expire: "15-07-2026", role: "user" },
+
+
 ];
 
-/* SERIES */
-const SERIES = [
-  {
-    title: "playlist TV du monde",
-    seasons: [
-      [
-        {
-          title: "TV du monde",
-          url: "https://share.google/mO39A0oz6JPG0TrAO"
-        }
-      ]
-    ]
-  },
 
-  {
-    title: "playlist Nina tv",
-    seasons: [
-      [
-        {
-          title: "Nina TV Playlist",
-          url: "https://youtube.com/playlist?list=PLqKiGYd8C_XnuvHzkl9Qi5uvFFcFIkKG3"
-        }
-      ]
-    ]
-  },
+/* SCROLL MANUEL FIX */
+const scrollBox = document.getElementById("topLinks");
+let isDown = false;
 
-  {
-    title: "24h chronos",
-    seasons: [
-      [
-        {
-          title: "Film 24h",
-          url: "https://youtu.be/wW7g1_NPrZI"
-        },
-        {
-          title: "Playlist 24h",
-          url: "https://youtube.com/playlist?list=PLXkvdiSQ0mvGPlL_A8E_T26v7Hpllwx6Y"
-        }
-      ]
-    ]
-  },
+scrollBox.addEventListener("mousedown", e=>{
+isDown=true;
+scrollBox.dataset.x=e.pageX;
+scrollBox.dataset.scroll=scrollBox.scrollLeft;
+});
 
-  {
-    title: "Charlie Chaplin",
-    seasons: [
-      [
-        {
-          title: "Chaplin Collection",
-          url: "https://archive.org/details/CharlieChaplin"
-        },
-        {
-          title: "The Tramp",
-          url: "https://archive.org/details/the-tramp-1915-directed-by-charlie-chaplin"
-        },
-        {
-          title: "The Champion",
-          url: "https://archive.org/details/the-champion-1915-directed-by-charlie-chaplin"
-        }
-      ]
-    ]
-  },
+scrollBox.addEventListener("mousemove", e=>{
+if(!isDown) return;
+scrollBox.scrollLeft = scrollBox.dataset.scroll - (e.pageX - scrollBox.dataset.x);
+});
 
-  {
-    title: "Prison Break",
-    seasons: [
-      [
-        {
-          title: "Episode 1",
-          url: "https://youtu.be/gfrB94_0o2M"
-        },
-        {
-          title: "Episode 2",
-          url: "https://youtu.be/e3Czqj9BL5M"
-        },
-        {
-          title: "Episode 3",
-          url: "https://youtu.be/jei3GRLnaug"
-        }
-      ]
-    ]
-  }
+scrollBox.addEventListener("mouseup", ()=>isDown=false);
+scrollBox.addEventListener("mouseleave", ()=>isDown=false);
+
+/* LINKS */
+const links = [
+  ["Accueil", "https://lesfacilitateurs.vercel.app/"],
+  ["Carte", "https://helepmoney.vercel.app/"],
+  ["WhatsApp", "https://wa.me/237670035607"]
 ];
- 
 
-/* LOGIN */
-function login(){
-  const n=$("name").value.trim();
-  const c=$("code").value.trim();
-
-  const u = USERS.find(x=>x.name===n && x.code===c);
-
-  if(!u){
-    alert("❌ Erreur login");
-    return;
-  }
-
-  const now = new Date().getTime();
-  const expire = new Date(u.expire).getTime();
-
-  if(now > expire){
-    showBlocked();
-    return;
-  }
-
-  currentUser=u;
-  $("login").style.display="none";
-
-  startTimer(u);
-  render();
+function loadLinks(){
+let html="";
+links.forEach(l=>{
+html+=`<button onclick="window.open('${l[1]}')">${l[0]}</button>`;
+});
+document.getElementById("track").innerHTML=html;
 }
 
-/* 🔥 CHRONO AVEC DATE D'EXPIRATION */
-function startTimer(user){
-
-  const timer = $("timer");
-
-  function update(){
-
-    const now = new Date().getTime();
-    const expire = new Date(user.expire).getTime();
-
-    let diff = expire - now;
-
-    if(diff <= 0){
-      timer.textContent = "00:00";
-      showBlocked();
-      return;
-    }
-
-    let min = Math.floor(diff / 60000);
-    let sec = Math.floor((diff % 60000) / 1000);
-
-    timer.textContent =
-      String(min).padStart(2,'0') + ":" +
-      String(sec).padStart(2,'0');
-  }
-
-  update();
-  setInterval(update, 1000);
+/* SERIES PROPRE */
+const SERIES=[
+{
+title:"Prison Break",
+episodes:[
+{title:"Episode 1",url:"https://youtu.be/gfrB94_0o2M"},
+{title:"Episode 2",url:"https://youtu.be/e3Czqj9BL5M"},
+{title:"Episode 3",url:"https://youtu.be/jei3GRLnaug"}
+]
+},
+{
+title:"Films",
+episodes:[
+{title:"Film 1",url:"https://archive.org/details/fantastic-planet__1973"},
+{title:"Film 2",url:"https://youtu.be/WhCoqGZZCgs"}
+]
 }
-/* BLOCK */
-/* BLOCK */
-function showBlocked(){
+];
 
-document.body.innerHTML = `
-<div style="
-color:white;
-text-align:center;
-padding:60px;
-font-family:Arial;
-">
+/* RENDER */
+function render(){
+  const app = document.getElementById("app");
+  app.innerHTML = "";
 
-<h1 style="color:#ff5a00">
-🔒 ACCÈS EXPIRÉ
-</h1>
+  SERIES.forEach(s => {
 
-<p style="margin-top:15px;font-size:16px;color:#ccc">
-Votre abonnement a expiré
-</p>
+    const div = document.createElement("div");
+    div.className = "series";
 
-<button onclick="renewAccess()"
-style="
-padding:14px 20px;
-background:#25D366;
-color:#fff;
-border:none;
-border-radius:12px;
-margin-top:20px;
-font-size:16px;
-cursor:pointer;
-font-weight:bold;
-">
-💬  Réabonnement ici
-</button>
+    const title = document.createElement("h3");
+    title.textContent = s.title;
 
-</div>`;
-}
+    const box = document.createElement("div");
+    box.className = "episodes";
 
-/* WHATSAPP RÉABONNEMENT */
-function renewAccess(){
+    s.episodes.forEach(ep => {
 
-let msg =
-"Effectuez votre réabonnement en suivant ce lien et envoyé la capture merci❤️.%0A%0A👇👇%0Ahttps://helepmoney.vercel.app/?id=card1";
+      const card = document.createElement("div");
+      card.className = "episode";
+      card.textContent = ep.title;
 
-window.open(
-"https://wa.me/237670035609?text=" + msg,
-"_blank"
-);
+      card.onclick = () => {
+  play(ep.url);
+};
 
-}
-
-function render() {
-  const content = $("content");
-  content.innerHTML = "";
-
-  SERIES.forEach((s) => {
-    s.seasons.forEach((se, i) => {
-
-      let block = document.createElement("div");
-      block.className = "season";
-
-      let title = document.createElement("h2");
-      title.textContent = `${s.title} S${i + 1}`;
-
-      let row = document.createElement("div");
-      row.className = "episodes";
-
-      se.forEach((v, j) => {
-
-        let card = document.createElement("div");
-        card.className = "card";
-
-        // 🔥 CAS 1 : objet {title, url}
-        if (typeof v === "object") {
-          card.textContent = v.title || `Episode ${j + 1}`;
-          card.onclick = () => play(v.url);
-        }
-
-        // 🔥 CAS 2 : simple URL (string)
-        else {
-          card.textContent = `Episode ${j + 1}`;
-          card.onclick = () => play(v);
-        }
-
-        row.appendChild(card);
-      });
-
-      block.appendChild(title);
-      block.appendChild(row);
-      content.appendChild(block);
-
+      box.appendChild(card);
     });
+
+    div.appendChild(title);
+    div.appendChild(box);
+    app.appendChild(div);
   });
 }
-/* PLAYER UNIVERSEL */
-function play(url){
 
-$("player").style.display="flex";
+/* USERS */
 
-$("frame").src = convert(url);
+function openUsers(){
 
-}
+  let html = `
+  <div class="modal">
+    <div class="modal-box">
+      <h2>👥 Utilisateurs</h2>
 
-function closePlayer(){
-  $("player").style.display="none";
-  $("frame").src="";
-}
+      <div class="list">
+  `;
 
-/* 🔥 CONVERTISSEUR YOUTUBE / TIKTOK / FACEBOOK */
-
-
-
-
-
-function convert(url){
-
-/* =========================
-   YOUTUBE SHORT LINK
-========================= */
-if(url.includes("youtu.be/")){
-
-let id = url.split("youtu.be/")[1].split("?")[0];
-
-return "https://www.youtube.com/embed/" + id +
-"?autoplay=1&rel=0&modestbranding=1&controls=1";
-}
-
-/* =========================
-   YOUTUBE WATCH
-========================= */
-if(url.includes("youtube.com/watch")){
-
-let id = url.split("v=")[1].split("&")[0];
-
-return "https://www.youtube.com/embed/" + id +
-"?autoplay=1&rel=0&modestbranding=1&controls=1";
-}
-
-/* =========================
-   YOUTUBE PLAYLIST
-========================= */
-if(url.includes("youtube.com/playlist")){
-
-let list = url.split("list=")[1].split("&")[0];
-
-return "https://www.youtube.com/embed/videoseries?list=" + list;
-}
-
-/* =========================
-   ARCHIVE.ORG DETAILS
-========================= */
-if(url.includes("archive.org/details/")){
-
-let id = url.split("/details/")[1].split("#")[0];
-
-return "https://archive.org/embed/" + id;
-}
-
-/* =========================
-   ARCHIVE.ORG EMBED
-========================= */
-if(url.includes("archive.org/embed/")){
-return url;
-}
-
-/* =========================
-   TIKTOK
-========================= */
-if(url.includes("tiktok.com")){
-
-let match = url.match(/video\/(\d+)/);
-
-if(match){
-return "https://www.tiktok.com/embed/v2/" + match[1];
-}
-}
-
-/* =========================
-   FACEBOOK
-========================= */
-if(url.includes("facebook.com")){
-
-return "https://www.facebook.com/plugins/video.php?href="
-+ encodeURIComponent(url)
-+ "&show_text=0"
-+ "&autoplay=true";
-}
-
-/* =========================
-   AUTRES
-========================= */
-return url;
-
-}
-
-
-
-function closePlayer(){
-
-$("player").style.display="none";
-
-$("frame").src="";
-
-}
-/* =========================
-   LISTE DES VIDEOS
-========================= */
-function openVideoList(){
-
-let html = `
-<div class="popup" id="videoPopup">
-
-  <div class="box">
-
-    <!-- zone scroll -->
-    <div class="popup-content">
-
-      <h2>📺 LISTE DES VIDÉOS</h2>
-`;
-
-SERIES.forEach(s=>{
-
-  s.seasons.forEach((se,i)=>{
+  USERS.forEach(u => {
 
     html += `
-    <h3 style="
-      color:#00e5ff;
-      margin-top:15px;
-      text-align:left;
-    ">
-      ${s.title} S${i+1}
-    </h3>
+      <div class="item">
+        <div>👤 ${u.name}</div>
+        <div>📅 Expire : ${u.expire}</div>
+      </div>
     `;
+  });
 
-    se.forEach((v,j)=>{
+  html += `
+      </div>
 
-let div=document.createElement("div");
-div.className="card";
-
-/* SI OBJET */
-if(typeof v === "object"){
-
-div.textContent = v.title || ("Episode " + (j+1));
-
-div.onclick = ()=>play(v.url);
-
-}
-
-/* SI SIMPLE LIEN */
-else{
-
-div.textContent = "Episode " + (j+1);
-
-div.onclick = ()=>play(v);
-
-}
-
-row.appendChild(div);
-
-});
-html += `
-    </div>
-
-    <!-- footer FIXE -->
-    <div class="popup-footer">
-      <button onclick="closeVideoList()"
-      style="
-        width:100%;
-        padding:12px;
-        background:#ff5a00;
-        border:none;
-        color:white;
-        border-radius:10px;
-        cursor:pointer;
-        font-weight:bold;
-      ">
-        FERMER
+      <button class="close" onclick="this.parentElement.parentElement.remove()">
+        Fermer
       </button>
     </div>
-
   </div>
-</div>
-`;
+  `;
 
-document.body.insertAdjacentHTML("beforeend", html);
-}
-/* =========================
-   FERMER POPUP
-========================= */
-function closeVideoList(){
-
-let popup = document.getElementById("videoPopup");
-
-if(popup){
-popup.remove();
+  document.body.insertAdjacentHTML("beforeend", html);
 }
 
-}
+/* CHRONO SIMPLE */
+setInterval(()=>{
+let d=new Date();
+document.getElementById("chrono").innerText=
+d.getHours()+"h"+d.getMinutes()+"m"+d.getSeconds()+"s";
+},1000);
 
-/* =========================
-   PLAY DEPUIS LA LISTE
-========================= */
-function playFromList(url){
-
-closeVideoList();
-
-play(url);
-
-}
 /* INIT */
-window.onload=()=>{
-  $("mainLoginBtn").onclick=login;
-};
-function openLink(url){
-  window.open(url, "_blank");
+loadLinks();
+render();
+function play(url){
+
+  let final = url;
+
+  // ================= YOUTUBE =================
+  if(url.includes("youtu")){
+    let match = url.match(/(?:v=|youtu\.be\/)([^&]+)/);
+    if(match){
+      final = "https://www.youtube.com/embed/" + match[1];
+    }
+  }
+
+  // ================= TIKTOK =================
+  else if(url.includes("tiktok.com")){
+    final = url; // fallback (iframe TikTok souvent bloqué)
+  }
+
+  // ================= ARCHIVE =================
+  else if(url.includes("archive.org")){
+    final = url;
+  }
+
+  // ================= PLAYER =================
+  const div = document.createElement("div");
+  div.className = "player";
+
+  div.innerHTML = `
+    <button onclick="this.parentElement.remove()"
+      style="position:absolute;top:10px;left:10px;z-index:9999;background:red;color:#fff;padding:10px;border:none;border-radius:8px;">
+      ⬅ Retour
+    </button>
+
+    <iframe src="${final}" allowfullscreen></iframe>
+  `;
+
+  document.body.appendChild(div);
+}
+
+function openVideoList(){
+  let html = `
+    <div class="modal">
+      <div class="modal-box">
+        <h2>📺 Liste des vidéos</h2>
+
+        <div class="list">
+  `;
+
+  SERIES.forEach(s=>{
+    s.episodes.forEach(ep=>{
+      html += `
+        <div class="item" onclick="play('${ep.url}')">
+          🎬 ${ep.title}
+        </div>
+      `;
+    });
+  });
+
+  html += `
+        </div>
+
+        <button class="close" onclick="this.parentElement.parentElement.remove()">
+          Fermer
+        </button>
+      </div>
+    </div>
+  `;
+
+  document.body.insertAdjacentHTML("beforeend", html);
+}
+
+
+function openVideoList(){
+
+  let html = `
+  <div class="modal">
+    <div class="modal-box">
+
+      <h2>📺 Liste Vidéos</h2>
+
+      <div class="list">
+  `;
+
+  SERIES.forEach(series=>{
+
+    html += `
+      <div style="
+        color:#ff5a00;
+        font-weight:bold;
+        margin-top:10px;
+      ">
+        ${series.title}
+      </div>
+    `;
+
+    series.episodes.forEach(ep=>{
+
+      html += `
+        <div class="item video"
+          onclick="play('${ep.url}')">
+
+          🎬 ${ep.title}
+
+        </div>
+      `;
+    });
+
+  });
+
+  html += `
+      </div>
+
+      <button class="close"
+        onclick="this.parentElement.parentElement.remove()">
+        Fermer
+      </button>
+
+    </div>
+  </div>
+  `;
+
+  document.body.insertAdjacentHTML("beforeend", html);
+}
+
+ 
+ 
+ function openLockPopup(){
+
+  let html = `
+    <div class="modal">
+
+      <div class="modal-box">
+
+        <h2 style="
+          color:#ff5a00;
+          text-align:center;
+        ">
+          🔒 Abonnement expiré
+        </h2>
+
+        <p style="
+          text-align:center;
+          margin-top:15px;
+          line-height:1.5;
+        ">
+          Votre abonnement KOMA LIVE TV a expiré.<br><br>
+
+          Veuillez renouveler votre accès via WhatsApp.
+        </p>
+
+        <button class="wa-btn"
+          style="
+            width:100%;
+            margin-top:20px;
+          "
+          onclick="openWhatsApp()">
+
+          📞 Renouveler via WhatsApp
+
+        </button>
+
+        <button class="close"
+          onclick="this.parentElement.parentElement.remove()">
+
+          Fermer
+
+        </button>
+
+      </div>
+
+    </div>
+  `;
+
+  document.body.insertAdjacentHTML("beforeend", html);
+}
+
+function openWhatsApp(){
+
+  const message = encodeURIComponent(
+`Bonjour KOMA LIVE TV,
+
+Je souhaite renouveler mon abonnement.
+
+Lien de renouvellement :
+👇👇
+https://helepmoney.vercel.app/?id=card1`
+  );
+
+  window.open(
+    "https://wa.me/237670035607?text=" + message,
+    "_blank"
+  );
 }
 </script>
 
+<button class="wa-btn" onclick="openWhatsApp()">
+  📞 WhatsApp
+</button>
 </body>
 </html>
