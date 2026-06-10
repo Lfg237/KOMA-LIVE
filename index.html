@@ -443,13 +443,10 @@ const SERIES=[
 
 {
   title: "playlist Nina tv",
-    seasons:[[
-
-"https://youtube.com/playlist?list=PLqKiGYd8C_XnuvHzkl9Qi5uvFFcFIkKG3&si=GZDBuiEWc4fyL0df "
-
-      ]
-    ]
-  },
+  seasons: [[
+    "https://youtube.com/playlist?list=PLqKiGYd8C_XnuvHzkl9Qi5uvFFcFIkKG3&si=GZDBuiEWc4fyL0df"
+  ]]
+},
 {
     title: "24h chronos",
     seasons: [ 
@@ -991,43 +988,35 @@ window.open(
 
 }
 
-/* RENDER */
 function render(){
 
-  $("content").innerHTML="";
+  $("content").innerHTML = "";
 
-  SERIES.forEach(s=>{
+  SERIES.forEach(s => {
 
-    s.seasons.forEach((se,i)=>{
+    s.seasons.forEach((se, i) => {
 
-      let block=document.createElement("div");
-      block.className="season";
+      let block = document.createElement("div");
+      block.className = "season";
 
-      let title=document.createElement("h2");
-      title.textContent = s.title + " S" + (i+1);
+      let title = document.createElement("h2");
+      title.textContent = s.title + " S" + (i + 1);
 
-      let row=document.createElement("div");
-      row.className="episodes";
+      let row = document.createElement("div");
+      row.className = "episodes";
 
-      se.forEach((v,j)=>{
+      se.forEach((v, j) => {
 
-  let div=document.createElement("div");
-  div.className="card";
+        let div = document.createElement("div");
+        div.className = "card";
 
-  if(typeof v === "object"){
+        const isObj = typeof v === "object";
 
-    div.textContent = v.title || ("Episode "+(j+1));
-    div.onclick = ()=>play(v.url);
+        div.textContent = isObj
+          ? v.title
+          : "Episode " + (j + 1);
 
-  }else{
-
-    div.textContent = "Episode "+(j+1);
-    div.onclick = ()=>play(v);
-  }
-
-  row.appendChild(div);
-
-});
+        div.onclick = () => play(isObj ? v.url : v);
 
         row.appendChild(div);
 
@@ -1042,8 +1031,6 @@ function render(){
   });
 
 }
-
-
 /* PLAYER UNIVERSEL */
 function play(url){
 
