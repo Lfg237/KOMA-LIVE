@@ -689,42 +689,59 @@ const SERIES = [
 
 
 
-
 /* RENDER */
-function render(){
+function render() {
+
   const app = document.getElementById("app");
   app.innerHTML = "";
 
-  SERIES.forEach(s => {
+  SERIES.forEach(series => {
 
     const div = document.createElement("div");
     div.className = "series";
 
+    /* titre série */
     const title = document.createElement("h3");
-    title.textContent = s.title;
+    title.textContent = series.title;
+    div.appendChild(title);
 
-    const box = document.createElement("div");
-    box.className = "episodes";
+    /* saisons */
+    series.seasons.forEach((season, sIndex) => {
 
-    s.seasons[0].forEach(ep => {
+      const seasonDiv = document.createElement("div");
+      seasonDiv.className = "season";
 
-      const card = document.createElement("div");
-      card.className = "episode";
-      card.textContent = ep.title;
+      const seasonTitle = document.createElement("h4");
+      seasonTitle.textContent = "Saison " + (sIndex + 1);
+      seasonDiv.appendChild(seasonTitle);
 
-      card.onclick = () => {
-  play(ep.url);
-};
+      /* épisodes */
+      season.forEach(ep => {
 
-      box.appendChild(card);
+        const btn = document.createElement("a");
+
+        btn.className = "episode-btn";
+
+        /* IMPORTANT */
+        btn.href = ep.url;
+
+        btn.target = "_blank";
+
+        btn.textContent = ep.title;
+
+        seasonDiv.appendChild(btn);
+
+      });
+
+      div.appendChild(seasonDiv);
+
     });
 
-    div.appendChild(title);
-    div.appendChild(box);
     app.appendChild(div);
-  });
-}
 
+  });
+
+}
 /* USERS */
 
 function openUsers(){
