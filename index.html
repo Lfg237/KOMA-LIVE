@@ -125,23 +125,22 @@ padding:10px;
 border-radius:10px;
 cursor:pointer;
 }
-
-/* PLAYER */
 .player{
-position:fixed;
-inset:0;
-background:#000;
-display:flex;
-justify-content:center;
-align-items:center;
-z-index:99;
+  position:fixed;
+  inset:0;
+  background:#000;
+  z-index:99999;
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
 
 .player iframe{
-width:100%;
-height:100%;
-border:none;
+  width:100%;
+  height:100%;
+  border:none;
 }
+
 
 /* MARQUEE */
 .marquee{
@@ -696,57 +695,101 @@ const SERIES = [
 
 
 
-/* RENDER */
-function render() {
+function render(){
 
   const app = document.getElementById("app");
+
   app.innerHTML = "";
 
   SERIES.forEach(series => {
 
-    const div = document.createElement("div");
-    div.className = "series";
+    // =========================
+    // BLOC SERIE
+    // =========================
+    const seriesDiv =
+      document.createElement("div");
 
-    /* titre série */
-    const title = document.createElement("h3");
+    seriesDiv.className = "series";
+
+    // =========================
+    // TITRE SERIE
+    // =========================
+    const title =
+      document.createElement("h3");
+
     title.textContent = series.title;
-    div.appendChild(title);
 
-    /* saisons */
-    series.seasons.forEach((season, sIndex) => {
+    seriesDiv.appendChild(title);
 
-      const seasonDiv = document.createElement("div");
+    // =========================
+    // SAISONS
+    // =========================
+    series.seasons.forEach((season, index) => {
+
+      const seasonDiv =
+        document.createElement("div");
+
       seasonDiv.className = "season";
 
-      const seasonTitle = document.createElement("h4");
-      seasonTitle.textContent = "Saison " + (sIndex + 1);
+      // =========================
+      // TITRE SAISON
+      // =========================
+      const seasonTitle =
+        document.createElement("h4");
+
+      seasonTitle.textContent =
+        "Saison " + (index + 1);
+
       seasonDiv.appendChild(seasonTitle);
 
-      /* épisodes */
+      // =========================
+      // CONTENEUR EPISODES
+      // =========================
+      const episodesContainer =
+        document.createElement("div");
+
+      episodesContainer.className =
+        "episodes";
+
+      // =========================
+      // EPISODES
+      // =========================
       season.forEach(ep => {
 
-        const btn = document.createElement("a");
+        const btn =
+          document.createElement("div");
 
-        btn.className = "episode-btn";
+        btn.className = "episode";
 
-        /* IMPORTANT */
-        btn.href = ep.url;
+        btn.innerHTML = `
+          🎬 ${ep.title}
+        `;
 
-        btn.target = "_blank";
+        // lecture dans le player
+        btn.onclick = () => {
+          play(ep.url);
+        };
 
-        btn.textContent = ep.title;
-
-        seasonDiv.appendChild(btn);
+        episodesContainer.appendChild(btn);
 
       });
 
-      div.appendChild(seasonDiv);
+      seasonDiv.appendChild(
+        episodesContainer
+      );
+
+      seriesDiv.appendChild(
+        seasonDiv
+      );
 
     });
 
-    app.appendChild(div);
+    app.appendChild(seriesDiv);
 
   });
+
+}
+
 
 }
 /* USERS */
@@ -794,90 +837,155 @@ d.getHours()+"h"+d.getMinutes()+"m"+d.getSeconds()+"s";
 /* INIT */
 loadLinks();
 render();
+
 function play(url){
 
-  let final = url;
+  let finalUrl = url;
 
-  // ================= YOUTUBE =================
-  if(url.includes("youtu")){
-    let match = url.match(/(?:v=|youtu\.be\/)([^&]+)/);
-    if(match){
-      final = "https://www.youtube.com/embed/" + match[1];
+  // =========================
+  // YOUTUBE
+  // =========================
+  if(
+    url.includes("youtube.com") ||
+    url.includes("youtu.be")
+  ){
+
+    let videoId = "";
+
+    // youtu.be/xxxx
+    if(url.includes("youtu.be/")){
+      videoId =
+        url.split("youtu.be/")[1]
+        .split("?")[0];
     }
+
+    // youtube.com/watch?v=xxxx
+    else if(url.includes("v=")){
+      videoId =
+        url.split("v=")[1]
+        .split("&")[0];
+    }
+
+    finalUrl =
+      "https://www.youtube.com/embed/" +
+      videoId +
+      "?autoplay=1";
   }
 
-  // ================= TIKTOK =================
+  // =========================
+  // ARCHIVE.ORG
+  // =========================
+  else if(url.includes("archive.org/details/")){
+
+    let archiveId =
+      url.split("/details/")[1]
+      .split("?")[0];
+
+    finalUrl =
+      "https://archive.org/embed/" +
+      archiveId;
+  }
+
+  // =========================
+  // ARCHIVE EMBED
+  // =========================
+  else if(url.includes("archive.org/embed/")){
+
+    finalUrl = url;
+  }
+
+  // =========================
+  // TIKTOK
+  // =========================
   else if(url.includes("tiktok.com")){
-    final = url; // fallback (iframe TikTok souvent bloqué)
+
+    finalUrl = url;
   }
 
-  // ================= ARCHIVE =================
-  else if(url.includes("archive.org")){
-    final = url;
+  // =========================
+  // GOOGLE SHARE
+  // =========================
+  else if(
+    url.includes("share.google")
+  ){
+
+    finalUrl = url;
   }
 
-  // ================= PLAYER =================
-  const div = document.createElement("div");
+  // =========================
+  // PLAYER
+  // =========================
+  const div =
+    document.createElement("div");
+
   div.className = "player";
 
   div.innerHTML = `
-    <button onclick="this.parentElement.remove()"
-      style="position:absolute;top:10px;left:10px;z-index:9999;background:red;color:#fff;padding:10px;border:none;border-radius:8px;">
-      ⬅ Retour
-    </button>
+  
+    <div style="
+      position:absolute;
+      top:10px;
+      left:10px;
+      right:10px;
+      z-index:9999;
+      display:flex;
+      gap:10px;
+    ">
 
-    <iframe src="${final}" allowfullscreen></iframe>
+      <button
+        onclick="this.closest('.player').remove()"
+        style="
+          background:red;
+          color:#fff;
+          border:none;
+          padding:10px 15px;
+          border-radius:10px;
+          cursor:pointer;
+        "
+      >
+        ❌ Fermer
+      </button>
+
+      <button
+        onclick="window.open('${url}','_blank')"
+        style="
+          background:#ff5a00;
+          color:#fff;
+          border:none;
+          padding:10px 15px;
+          border-radius:10px;
+          cursor:pointer;
+        "
+      >
+        🔗 Ouvrir
+      </button>
+
+    </div>
+
+    <iframe
+      src="${finalUrl}"
+      allowfullscreen
+      allow="
+        autoplay;
+        encrypted-media;
+        picture-in-picture;
+        web-share
+      "
+      referrerpolicy="no-referrer"
+      style="
+        width:100%;
+        height:100%;
+        border:none;
+        background:#000;
+      "
+    ></iframe>
+
   `;
 
   document.body.appendChild(div);
 }
 
-function openVideoList(){
 
-  let html = `
-    <div class="modal">
-      <div class="modal-box">
-        <h2>📺 Liste des vidéos</h2>
-
-        <div class="list">
-  `;
-
-  SERIES.forEach(series => {
-
-    series.seasons.forEach(season => {
-
-      season.forEach(ep => {
-
-        html += `
-          <div class="item video" onclick="play('${ep.url}')">
-
-            🎬 ${ep.title}
-
-          </div>
-        `;
-
-      });
-
-    });
-
-  });
-
-  html += `
-        </div>
-
-        <button class="close"
-          onclick="this.parentElement.parentElement.remove()">
-
-          Fermer
-
-        </button>
-
-      </div>
-    </div>
-  `;
-
-  document.body.insertAdjacentHTML("beforeend", html);
-}
  
  
  function openLockPopup(){
