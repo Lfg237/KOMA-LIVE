@@ -694,7 +694,6 @@ const SERIES = [
 ];
 
 
-
 function render(){
 
   const app = document.getElementById("app");
@@ -703,95 +702,63 @@ function render(){
 
   SERIES.forEach(series => {
 
-    // =========================
-    // BLOC SERIE
-    // =========================
-    const seriesDiv =
+    // bloc série
+    const block =
       document.createElement("div");
 
-    seriesDiv.className = "series";
+    block.className = "series";
 
-    // =========================
-    // TITRE SERIE
-    // =========================
-    const title =
-      document.createElement("h3");
+    // titre
+    block.innerHTML += `
+      <h3>${series.title}</h3>
+    `;
 
-    title.textContent = series.title;
-
-    seriesDiv.appendChild(title);
-
-    // =========================
-    // SAISONS
-    // =========================
+    // saisons
     series.seasons.forEach((season, index) => {
 
-      const seasonDiv =
+      block.innerHTML += `
+        <h4>Saison ${index + 1}</h4>
+      `;
+
+      // conteneur épisodes
+      const row =
         document.createElement("div");
 
-      seasonDiv.className = "season";
+      row.className = "episodes";
 
-      // =========================
-      // TITRE SAISON
-      // =========================
-      const seasonTitle =
-        document.createElement("h4");
-
-      seasonTitle.textContent =
-        "Saison " + (index + 1);
-
-      seasonDiv.appendChild(seasonTitle);
-
-      // =========================
-      // CONTENEUR EPISODES
-      // =========================
-      const episodesContainer =
-        document.createElement("div");
-
-      episodesContainer.className =
-        "episodes";
-
-      // =========================
-      // EPISODES
-      // =========================
+      // épisodes
       season.forEach(ep => {
 
-        const btn =
+        const card =
           document.createElement("div");
 
-        btn.className = "episode";
+        card.className = "episode";
 
-        btn.innerHTML = `
+        card.innerHTML = `
           🎬 ${ep.title}
         `;
 
-        // lecture dans le player
-        btn.onclick = () => {
+        card.onclick = () => {
           play(ep.url);
         };
 
-        episodesContainer.appendChild(btn);
+        row.appendChild(card);
 
       });
 
-      seasonDiv.appendChild(
-        episodesContainer
-      );
-
-      seriesDiv.appendChild(
-        seasonDiv
-      );
+      block.appendChild(row);
 
     });
 
-    app.appendChild(seriesDiv);
+    app.appendChild(block);
 
   });
 
 }
 
 
-}
+
+
 /* USERS */
 
 function openUsers(){
