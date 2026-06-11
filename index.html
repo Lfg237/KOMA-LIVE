@@ -954,6 +954,80 @@ function play(url){
 
 
  
+function openVideoList(){
+
+  let html = `
+  
+  <div class="modal">
+
+    <div class="modal-box">
+
+      <h2>📺 Liste des vidéos</h2>
+
+      <div class="list">
+  `;
+
+  // =========================
+  // SERIES
+  // =========================
+  SERIES.forEach(series => {
+
+    // =========================
+    // SAISONS
+    // =========================
+    series.seasons.forEach(season => {
+
+      // =========================
+      // VIDEOS
+      // =========================
+      season.forEach(ep => {
+
+        html += `
+
+          <div class="item video"
+
+               onclick="play('${ep.url}')">
+
+            🎬 ${ep.title}
+
+          </div>
+
+        `;
+
+      });
+
+    });
+
+  });
+
+  html += `
+
+      </div>
+
+      <button
+        class="close"
+
+        onclick="
+          this.parentElement.parentElement.remove()
+        ">
+
+        Fermer
+
+      </button>
+
+    </div>
+
+  </div>
+  `;
+
+  document.body.insertAdjacentHTML(
+    "beforeend",
+    html
+  );
+
+}
+
+
  
  function openLockPopup(){
 
