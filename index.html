@@ -808,63 +808,39 @@ const SERIES = [
 function render(){
 
   const app = document.getElementById("app");
-
   app.innerHTML = "";
 
   SERIES.forEach(series => {
 
-    // bloc série
-    const block =
-      document.createElement("div");
+    const div = document.createElement("div");
+    div.className = "series";
 
-    block.className = "series";
+    const title = document.createElement("h3");
+    title.textContent = series.title;
+    div.appendChild(title);
 
-    // titre
-    block.innerHTML += `
-      <h3>${series.title}</h3>
-    `;
+    series.seasons.forEach(season => {
 
-    // saisons
-    series.seasons.forEach((season, index) => {
+      const seasonDiv = document.createElement("div");
 
-      block.innerHTML += `
-        <h4>Saison ${index + 1}</h4>
-      `;
-
-      // conteneur épisodes
-      const row =
-        document.createElement("div");
-
-      row.className = "episodes";
-
-      // épisodes
       season.forEach(ep => {
 
-        const card =
-          document.createElement("div");
+        const btn = document.createElement("button");
 
-        card.className = "episode";
+        btn.className = "episode";
 
-        card.innerHTML = `
-          🎬 ${ep.title}
-        `;
+        btn.textContent = ep.title;
 
-        card.onclick = () => {
-          play(ep.url);
-        };
+        btn.onclick = () => play(ep.url);
 
-        row.appendChild(card);
-
+        seasonDiv.appendChild(btn);
       });
 
-      block.appendChild(row);
-
+      div.appendChild(seasonDiv);
     });
 
-    app.appendChild(block);
-
+    app.appendChild(div);
   });
-
 }
 
 
