@@ -151,7 +151,7 @@ header{
 }
 
 
-..mini-btn{
+.mini-btn{
   width:42px;
   height:42px;
 
@@ -408,46 +408,151 @@ footer{
 /* =========================
    MODAL
 ========================= */
+./* =========================
+   MODAL
+========================= */
 .modal{
   position:fixed;
   inset:0;
 
-  background:rgba(0,0,0,0.85);
+  background:rgba(0,0,0,0.88);
 
   display:flex;
   justify-content:center;
   align-items:center;
 
-  padding:20px;
+  padding:15px;
 
   z-index:999999;
 }
 
-...modal-box{
+/* =========================
+   BOX
+========================= */
+.modal-box{
+  width:100%;
+  max-width:420px;
+  height:85vh;
+
   background:#111;
 
-  width:90%;
-  max-width:400px;
-
-  max-height:85vh;
-
-  border-radius:20px;
-
-  color:#fff;
+  border-radius:18px;
 
   display:flex;
   flex-direction:column;
 
-  box-shadow:0 0 25px rgba(0,0,0,0.5);
-
   overflow:hidden;
-}
-.modal-box h2{
-  text-align:center;
-  color:#ff5a00;
-  margin-bottom:15px;
+
+  box-shadow:0 0 30px rgba(0,0,0,0.5);
+
+  border:1px solid rgba(255,255,255,0.06);
 }
 
+/* =========================
+   HEADER MODAL
+========================= */
+.modal-header{
+  position:sticky;
+  top:0;
+
+  background:#151515;
+
+  padding:15px;
+
+  z-index:10;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  border-bottom:1px solid rgba(255,255,255,0.06);
+}
+
+.modal-header h2{
+  color:#ff5a00;
+  font-size:18px;
+}
+
+/* =========================
+   BOUTON FERMER
+========================= */
+.close{
+  border:none;
+
+  background:linear-gradient(135deg,#ff2d2d,#cc0000);
+
+  color:#fff;
+
+  width:42px;
+  height:42px;
+
+  border-radius:12px;
+
+  font-size:18px;
+  font-weight:bold;
+
+  cursor:pointer;
+
+  flex-shrink:0;
+
+  transition:0.2s;
+}
+
+.close:hover{
+  transform:scale(1.08);
+}
+
+/* =========================
+   LISTE SCROLL
+========================= */
+.list{
+  flex:1;
+
+  overflow-y:auto;
+
+  padding:15px;
+
+  display:flex;
+  flex-direction:column;
+
+  gap:10px;
+
+  scrollbar-width:thin;
+}
+
+/* SCROLLBAR */
+.list::-webkit-scrollbar{
+  width:6px;
+}
+
+.list::-webkit-scrollbar-thumb{
+  background:#ff5a00;
+  border-radius:20px;
+}
+
+/* =========================
+   ITEM
+========================= */
+.item{
+  background:#1a1a1a;
+
+  padding:14px;
+
+  border-radius:12px;
+
+  cursor:pointer;
+
+  transition:0.2s;
+
+  border:1px solid rgba(255,255,255,0.04);
+}
+
+.item:hover{
+  background:#ff5a00;
+  color:#000;
+
+  transform:translateX(3px);
+}
 /* =========================
    LIST
 ========================= */
@@ -524,14 +629,23 @@ footer{
 
 <div id="chrono">0h0m0s</div>
 
-<div id="topLinks">
-<div id="track"></div>
+
+<div class="modal">
+  <div class="modal-box">
+
+    <div class="modal-header">
+      <h2>Liste vidéos</h2>
+      <button class="close">✕</button>
+    </div>
+
+    <div class="list">
+      ...
+    </div>
+
+  </div>
 </div>
 
-<div class="actions">
-<button class="mini-btn" onclick="openUsers()">👥</button>
-<button class="mini-btn" onclick="openVideoList()">📺</button>
-</div>
+
 
 </header>
 <div id="app"></div>
