@@ -1,273 +1,447 @@
-<!DOCTYPE html>
+4<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>KOMA LIVE TV</title>
+<title>KOMA LIVE</title>
 
 <style>
-/* =========================
-   RESET
-========================= */
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
-
-/* =========================
-   BODY
-========================= */
 body{
+  margin:0;
   font-family:Arial,sans-serif;
   color:#fff;
-  min-height:100vh;
+  padding-bottom:100px;
+  background:linear-gradient(180deg,#050505,#0b0b0b,#111);
   overflow-x:hidden;
-
-  background:
-  linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.85)),
-  url("https://raw.githubusercontent.com/Lfg237/KOMA-LIVE/main/Polish_20260611_073645865.png");
-
-  background-size:cover;
-  background-position:center;
-  background-repeat:no-repeat;
-  background-attachment:scroll;
-}
-
-/* =========================
-   HEADER FIXE PRO
-========================= */
-header{
-  position:fixed;
-  top:0;
-  left:0;
-  right:0;
-  height:70px;
-
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-
-  padding:10px 12px;
-
-  background:rgba(10,10,10,0.92);
-  backdrop-filter:blur(10px);
-
-  z-index:9999;
-  border-bottom:1px solid rgba(255,255,255,0.06);
-}
-
-/* LOGO */
-.logo{
-  font-weight:bold;
-  color:#ff5a00;
-  font-size:18px;
-  white-space:nowrap;
-}
-
-/* ACTION BUTTONS */
-.actions{
-  display:flex;
-  gap:10px;
-  flex-shrink:0;
-}
-
-/* BOUTONS HEADER (FIX CORRECT) */
-.mini-btn{
-  width:42px;
-  height:42px;
-
-  border:none;
-  border-radius:12px;
-
-  background:linear-gradient(135deg,#ff5a00,#ff7b00);
-  color:#fff;
-
-  font-size:18px;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  cursor:pointer;
-  box-shadow:0 4px 10px rgba(0,0,0,0.35);
-}
-
-/* =========================
-   MENU EXTERNE FIXÉ PRO
-========================= */
-#externalMenu{
-  margin-top:75px;
-  padding:10px;
-
-  display:flex;
-  gap:10px;
-
-  overflow-x:auto;
-  white-space:nowrap;
-
-  position:relative;
-  z-index:10;
-}
-
-#externalMenu button{
-  background:#ff5a00;
-  border:none;
-
-  padding:10px 14px;
-  border-radius:20px;
-
-  color:#fff;
-  cursor:pointer;
-
-  flex-shrink:0;
-}
-
-/* =========================
-   LISTE SCROLL FIX PRO
-========================= */
-.list{
-  flex:1;
   overflow-y:auto;
-
-  padding:15px;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-
-  min-height:0; /* IMPORTANT POUR SCROLL */
 }
 
-/* ITEM */
-.item{
-  background:#1a1a1a;
-  padding:12px;
-  border-radius:12px;
-  cursor:pointer;
+/* HEADER */
+header{
+position:fixed;
+top:0;
+left:0;
+right:0;
+height:90px;
+background:#0a0a0a;
+display:flex;
+align-items:center;
+gap:10px;
+padding:5px;
+z-index:10;
 }
 
-/* =========================
-   MODAL FIXÉ (SCROLL OK + BOUTON VISIBLE)
-========================= */
-.modal{
+.logo{
+font-weight:bold;
+white-space:nowrap;
+}
+
+#chrono{
+background:#111;
+padding:4px 8px;
+border-radius:6px;
+color:#ff5a00;
+font-size:12px;
+white-space:nowrap;
+}
+
+/* SCROLL LINKS */
+#topLinks{
+flex:1;
+overflow-x:auto;
+white-space:nowrap;
+cursor:grab;
+}
+#track{
+display:flex;
+gap:10px;
+padding:5px;
+}
+
+#track button{
+background:#ff5a00;
+border:none;
+color:#fff;
+padding:6px 10px;
+border-radius:20px;
+cursor:pointer;
+font-size:12px;
+white-space:nowrap;
+}
+
+/* BUTTONS */
+.actions{
+display:flex;
+gap:5px;
+}
+
+.mini-btn{
+background:#ff5a00;
+border:none;
+color:#fff;
+width:38px;
+height:38px;
+border-radius:8px;
+cursor:pointer;
+}
+
+/* CONTENT */
+
+#app{
+margin-top:95px;
+padding-bottom:120px; /* IMPORTANT */
+padding-left:10px;
+padding-right:10px;
+}
+
+footer{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+height:40px;
+background:#0a0a0a;
+z-index:9999;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:12px;
+}
+
+.series{
+margin-bottom:20px;
+}
+
+.episodes{
+display:flex;
+gap:10px;
+overflow-x:auto;
+}
+
+.episode{
+min-width:140px;
+background:#111;
+padding:10px;
+border-radius:10px;
+cursor:pointer;
+}
+
+/* PLAYER */
+.player{
   position:fixed;
   inset:0;
-
-  background:rgba(0,0,0,0.85);
-
+  background:#000;
+  z-index:99999;
   display:flex;
   justify-content:center;
   align-items:center;
-
-  padding:15px;
-
-  z-index:999999;
 }
 
-.modal-box{
+.player iframe{
   width:100%;
-  max-width:420px;
-  height:85vh;
-
-  background:#111;
-
-  border-radius:16px;
-
-  display:flex;
-  flex-direction:column;
-
-  overflow:hidden;
-}
-
-/* HEADER MODAL */
-.modal-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-
-  padding:12px 15px;
-
-  background:#151515;
-
-  border-bottom:1px solid rgba(255,255,255,0.06);
-
-  flex-shrink:0;
-}
-
-/* LISTE SCROLLABLE (IMPORTANT FIX) */
-.list{
-  flex:1;
-  overflow-y:auto;
-  min-height:0;
-}
-
-/* CLOSE BUTTON FIX PRO */
-.close{
-  width:38px;
-  height:38px;
-
+  height:100%;
   border:none;
-  border-radius:10px;
-
-  background:#ff2d2d;
-  color:#fff;
-  font-weight:bold;
-
-  cursor:pointer;
-
-  flex-shrink:0;
 }
 
-/* =========================
-   MARQUEE ULTRA STABLE + LENT
-========================= */
+/* MARQUEE */
+.marquee{
+position:fixed;
+bottom:40px;
+left:0;
+right:0;
+height:40px;
+background:#111;
+display:flex;
+align-items:center;
+padding:5px;
+overflow:hidden;
+z-index:50;
+}
+
+.marquee-text{
+white-space:nowrap;
+animation:move 12s linear infinite;
+}
+
+@keyframes move{
+0%{transform:translateX(100%)}
+100%{transform:translateX(-100%)}
+}
+.marquee{
+position:fixed;
+bottom:40px;
+left:0;
+right:0;
+height:40px;
+background:#111;
+display:flex;
+align-items:center;
+padding:0 10px;
+gap:10px;
+z-index:1000;
+}
+
+.marquee-text{
+white-space:nowrap;
+animation:move 12s linear infinite;
+flex:1;
+}
+
+
+.wa-btn{
+background:#25D366;
+color:#fff;
+border:none;
+padding:8px 14px;
+border-radius:25px;
+font-size:13px;
+font-weight:bold;
+cursor:pointer;
+white-space:nowrap;
+flex-shrink:0;
+
+/* 🔥 IMPORTANT POUR VISIBILITÉ */
+z-index:9999;
+box-shadow:0 0 10px rgba(0,0,0,0.5);
+border:2px solid #fff;
+}
 .marquee{
   position:fixed;
   bottom:40px;
   left:0;
   right:0;
-
   height:45px;
-
+  background:#111;
   display:flex;
   align-items:center;
   justify-content:space-between;
-
   padding:0 10px;
-
-  background:rgba(0,0,0,0.9);
-
+  gap:10px;
+  z-index:1000;
   overflow:hidden;
-
-  z-index:9998;
 }
 
-/* TEXTE LENT CORRIGÉ */
 .marquee-text{
   white-space:nowrap;
-
-  animation:scrollText 90s linear infinite; /* PLUS LENT */
+  flex:1;
+  animation:move 12s linear infinite;
 }
 
-@keyframes scrollText{
+@keyframes move{
   0%{transform:translateX(100%)}
   100%{transform:translateX(-100%)}
 }
 
-/* WHATSAPP FIX */
 .wa-btn{
   background:#25D366;
-  border:none;
-
-  padding:8px 14px;
-  border-radius:20px;
-
   color:#fff;
+  border:none;
+  padding:8px 12px;
+  border-radius:25px;
+  font-size:13px;
   font-weight:bold;
-
-  cursor:pointer;
-
+  white-space:nowrap;
   flex-shrink:0;
+  z-index:9999;
+}
+
+.marquee{
+  position:fixed;
+  bottom:40px;
+  left:0;
+  right:0;
+  height:45px;
+  background:#111;
+  display:flex;
+  align-items:center;
+  padding:0 10px;
+  gap:10px;
+  z-index:1000;
+  overflow:hidden;
+}
+
+/* texte défilant */
+.marquee-text{
+  flex:1;
+  min-width:0;
+  white-space:nowrap;
+  animation:move 12s linear infinite;
+}
+
+/* bouton TOUJOURS visible */
+.wa-btn{
+  flex:0 0 auto;
+  background:#25D366;
+  color:#fff;
+  border:none;
+  padding:8px 12px;
+  border-radius:20px;
+  font-size:13px;
+  font-weight:bold;
+  white-space:nowrap;
+  position:relative;
+  right:0;
+}
+
+/* animation */
+@keyframes move{
+  0%{transform:translateX(100%)}
+  100%{transform:translateX(-100%)}
+}
+
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.8);
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:9999;
+}
+
+.modal-box{
+background:#111;
+width:90%;
+max-width:350px;
+border-radius:15px;
+padding:15px;
+color:#fff;
+animation:pop .2s ease;
+}
+
+@keyframes pop{
+from{transform:scale(0.8);opacity:0}
+to{transform:scale(1);opacity:1}
+}
+
+.modal h2{
+text-align:center;
+margin-bottom:10px;
+}
+
+.list{
+display:flex;
+flex-direction:column;
+gap:10px;
+max-height:300px;
+overflow:auto;
+padding-right:5px;
+}
+
+.item{
+background:#1a1a1a;
+padding:10px;
+border-radius:10px;
+cursor:pointer;
+transition:0.2s;
+}
+
+.item:hover{
+background:#ff5a00;
+transform:scale(1.02);
+}
+
+.video{
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+.close{
+width:100%;
+margin-top:10px;
+padding:10px;
+border:none;
+background:red;
+color:#fff;
+border-radius:10px;
+cursor:pointer;
+}
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.8);
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:9999;
+}
+
+.modal-box{
+background:#111;
+width:90%;
+max-width:350px;
+border-radius:15px;
+padding:15px;
+color:#fff;
+}
+
+.list{
+display:flex;
+flex-direction:column;
+gap:10px;
+max-height:300px;
+overflow:auto;
+}
+
+.item{
+background:#1a1a1a;
+padding:10px;
+border-radius:10px;
+cursor:pointer;
+}
+
+.video:hover{
+background:#ff5a00;
+}
+#app{
+  margin-top:100px;
+  padding:10px;
+  display:block;
+  min-height:300px;
+}
+
+.series h3{
+  font-size:18px;
+  color:#ff5a00;
+  margin-bottom:10px;
+  border-left:4px solid #ff5a00;
+  padding-left:10px;
+  font-weight:bold;
+}
+
+.series{
+  margin-bottom:25px;
+  padding:10px;
+  border-bottom:1px solid #222;
+}
+
+.episode-btn{
+  display:inline-block;
+  background:#111;
+  color:#fff;
+  padding:10px;
+  margin:5px;
+  border-radius:10px;
+  text-decoration:none;
+  min-width:160px;
+  transition:0.2s;
+}
+
+.episode-btn:hover{
+  background:#ff5a00;
+  color:#000;
+  transform:scale(1.05);
+}
+.episode{
+  min-width:160px;
+  flex-shrink:0;
+  scroll-snap-align:start;
+}
+#app{
+  display:block;
+  min-height:200px;
+  color:#fff;
 }
 
 </style>
@@ -283,38 +457,22 @@ header{
 
 <div id="chrono">0h0m0s</div>
 
-
-<div class="modal">
-  <div class="modal-box">
-
-    <div class="modal-header">
-      <h2>Liste vidéos</h2>
-      <button class="close">✕</button>
-    </div>
-
-    <div class="list">
-      ...
-    </div>
-
-  </div>
+<div id="topLinks">
+<div id="track"></div>
 </div>
 
-
+<div class="actions">
+<button class="mini-btn" onclick="openUsers()">👥</button>
+<button class="mini-btn" onclick="openVideoList()">📺</button>
+</div>
 
 </header>
 <div id="app"></div>
 <div class="marquee">
 
-  <div class="marquee">
-
   <div class="marquee-text">
-    ❤️ KOMA LIVE TV💥 -CONTACT ADMINISTRATION POUR DÉDICACES ANNONCES ET SPOTS PUBLICITAIRES💥 PUB 💥 Brenda shopping vente des nuisettes à ngaoundere What's :+237 6 55 54 78 31💯💯💫💥 
+   ❤️ KOMA LIVE TV💥 - POUR VOS DÉDICACES ANNONCES ET SPOTS PUBLICITAIRE CONTACT ADMIN  A WHATSAPP
   </div>
-
-  <button class="wa-btn" onclick="openWhatsApp()">
-    📞 WhatsApp
-  </button>
-</div>
 <footer>
   Lesfacilitateurs groupe © 2026 - Tout droit réservé
 </footer>
@@ -322,31 +480,41 @@ header{
 	console.log("JS OK - KOMA LIVE chargé");
 const USERS = [
 	
-  { name: "koma", code: "x", expire: "01-01-2030", role: "admin" },
+  { name: "kamo", code: "x", expire: "01-01-2030", role: "admin" },
   { name: "elect", code: "2xx", expire: "15-07-2026", role: "user" },
     { name: "lufovic", code: "2x", expire: "15-07-2030", role: "user" },
-    { name: "komatv", code: "237", expire: "01-07-2026", role: "user" },
-{ name:" Brenda",code: "237", expire:"31-12-2030", rôle: "commerçante"},
-{ name: "vvo", code: "2x", expire: "15-07-2030", role: "user" },
-{ name: "vpo", code: "2x", expire: "15-07-2030", role: "user" },
-{ name: "bb", code: "2x", expire: "15-07-2030", role: "user" },
-{ name: "ppop", code: "2x", expire: "15-07-2030", role: "user" },
-{ name: "rrt", code: "2x", expire: "15-07-2030", role: "user" },
-{ name: "v", code: "2x", expire: "15-07-2030", role: "user" },
-{ name: "t45", code: "2x", expire: "15-07-2030", role: "user" },
-{ name: "v34", code: "2x", expire: "15-07-2030", role: "user" },
-{ name: "y34", code: "2x", expire: "15-07-2030", role: "user" },
-{ name: "v3a", code: "2x", expire: "15-07-2030", role: "user" },{ nam: "vvm", code: "2xe", expire: "15-07-2030", role: "user" },
-{ name: "vvma", code: "2x", expire: "15-07-2030", role: "user" },
-{ name: "vvmo", code: "2x", expire: "15-07-2030", role: "user" },
-{ name: "mami", code: "2x", expire: "15-07-2030", role: "user" },
-{ name: "v90", code: "2x", expire: "15-07-2030", role: "user" },
+    { nam: "brenda", code: "237, expire: "15-07-2030", role: "user" },
+{ nam: "vvo", code: "2x", expire: "15-07-2030", role: "user" },
+{ nam: "vpo", code: "2x", expire: "15-07-2030", role: "user" },
+{ nam: "bb", code: "2x", expire: "15-07-2030", role: "user" },
+{ nam: "ppop", code: "2x", expire: "15-07-2030", role: "user" },
+{ nam: "rrt", code: "2x", expire: "15-07-2030", role: "user" },
+{ nam: "v", code: "2x", expire: "15-07-2030", role: "user" },
+{ nam: "t45", code: "2x", expire: "15-07-2030", role: "user" },
+{ nam: "v34", code: "2x", expire: "15-07-2030", role: "user" },
+{ nam: "y34", code: "2x", expire: "15-07-2030", role: "user" },
+{ nam: "v3a", code: "2x", expire: "15-07-2030", role: "user" },{ nam: "vvm", code: "2xe", expire: "15-07-2030", role: "user" },
+{ nam: "vvma", code: "2x", expire: "15-07-2030", role: "user" },
+{ nam: "vvmo", code: "2x", expire: "15-07-2030", role: "user" },
+{ nam: "mami", code: "2x", expire: "15-07-2030", role: "user" },
+{ nam: "v90", code: "2x", expire: "15-07-2030", role: "user" },
 
-{ name: "123", code: "2x", expire: "15-07-2030", role: "user" },
-{ name: "455", code: "2x", expire: "15-07-2030", role: "user" },
-{ name: "vvm", code: "2x", expire: "15-07-2030", role: "user" },
-{ name: "mii", code: "2x", expire: "15-07-2030", role: "user" },
-{ name: "ntu", code: "2x", expire: "15-07-2030", role: "user" }
+{ nam: "123", code: "2x", expire: "15-07-2030", role: "user" },
+{ nam: "455", code: "2x", expire: "15-07-2030", role: "user" },
+{ nam: "vvm", code: "2x", expire: "15-07-2030", role: "user" },
+{ nam: "mii", code: "2x", expire: "15-07-2030", role: "user" },
+{ nam: "ntu", code: "2x", expire: "15-07-2030", role: "user" }
+
+
+
+
+
+
+
+
+
+
+
 
 
 ];
@@ -374,8 +542,7 @@ scrollBox.addEventListener("mouseleave", ()=>isDown=false);
 const links = [
   ["Accueil", "https://lesfacilitateurs.vercel.app/"],
   ["Carte", "https://helepmoney.vercel.app/"],
-  ["WhatsApp", "https://wa.me/237670035607"],
-["chaîne WhatsApp ","https://whatsapp.com/channel/0029Vb8CxB25Ui2VYo0Ylt2w"]
+  ["WhatsApp", "https://wa.me/237670035607"]
 ];
 
 function loadLinks(){
@@ -421,37 +588,9 @@ const SERIES = [
 { title: "graphique 20", url: "https://youtube.com/playlist?list=PL-kDknubECW4-gEwpco43ofPC5b4ptcYx&si=OP8Uggr-o8iuBDMy" },
 { title: "restauration 21", url: "https://youtube.com/playlist?list=PLsdYVqgoNKHXHhY1BKMZu3o1K5NnMJcxh&si=cQQeKK8GKaH_XwSu" },
 { title: "conduite automobile 22", url: "https://youtube.com/playlist?list=PLsdYVqgoNKHXHhY1BKMZu3o1K5NnMJcxh&si=cQQeKK8GKaH_XwSu" },
-{title: "schawamar",
-  seasons: [[
-    { title: "schawamar 23", url: "https://youtu.be/e_fw1W7FUIo?si=AbDjmdIcVq8cFIQg" },
-    { title: "pain schawamar 24", url: "https://youtu.be/CCcWbCtggn0?si=rWuoqRln9Z_TGqiW" },
-    { title: "sauce schawamar 25", url: "https://youtu.be/1wEnU9_wLcY?si=_3SqNyPh868Lzste" },
-    { title: "Episode 26", url: "https://youtu.be/5591r_p5wdw?si=76QULh4XmwETj2gO" }
-  ]]
-},
-
-{ title: "Episode 26", url: "https://youtu.be/5591r_p5wdw?si=76QULh4XmwETj2gO" },
-{ title: "Episode 27", url: "https://youtube.com/playlist?list=PLE-kGS5_63S_W9JdzF7xRcHocbXGZz0oK&si=PMXaCQnQ5xyUYLUz" },
-{ title: "Episode 28", url: "https://youtube.com/playlist?list=PLRaKHo9pDfTaMJftZztTlIbo0pRfJsDIm&si=IRvIZbaD8HWuKvbi" },
-{ title: "Episode 29", url: "https://youtu.be/XvU-Ye_bXsg?si=YBl5V7JcomeMA5hW" },
-{ title: "Episode 30", url: "https://youtube.com/playlist?list=PLqga_uWddPpmr8u8NvdH8aqlUhCJNNRMt&si=6LeswstIdpmmctgH" },
-{ title: "Episode 31", url: "https://youtu.be/kr94W6wgcZs?si=5b8aEDWIszRlSJk8" },
-{ title: "Episode 32", url: "https://youtube.com/playlist?list=PL36fOhgzBiSEqI2BzpU0k_ql8_dAMadxw&si=W8serZ3g3ukiClpp" },
-{ title: "Episode 33", url: "https://youtube.com/playlist?list=PL36fOhgzBiSF6qVCGTP5eMf51GDu9vLuj&si=UrHMl9hEOcuokFTV" },
-{ title: "Episode 34", url: "https://youtube.com/playlist?list=PL36fOhgzBiSF1Qxr1mylVz2M2NqU7Ddo_&si=zyi0pnyG0OKjbNnv" },
-{ title: "Episode 39", url: "https://youtube.com/playlist?list=PL36fOhgzBiSF1Qxr1mylVz2M2NqU7Ddo_&si=zyi0pnyG0OKjbNnv" },
-{ title: "Episode 40", url: "https://youtube.com/playlist?list=PL36fOhgzBiSFL6sM6OOUlNW7-oKWUbFfp&si=S7NLbeIVzcBqmOj-" },
-{ title: "Episode 49", url: "https://youtube.com/playlist?list=PL36fOhgzBiSGmJv3Vn7TF-QadaSgRULCg&si=47kV04sUWJoRWOeJ" },
-{ title: "Episode 50", url: "https://youtube.com/playlist?list=PL36fOhgzBiSFk37uYfORg59EiywOWgYOp&si=FXB8H26RqASaxL8Q" },
-{ title: "Episode 51", url: "https://youtube.com/playlist?list=PL36fOhgzBiSHxwIDa84dqHNpezhiqwWrc&si=n2kFLKUb9umMJtBg" },
-{ title: "Episode 52", url: "https://youtube.com/playlist?list=PL36fOhgzBiSH_5eeKQlh8Xlq4L7CWSkjf&si=Ro_VGEDvDWXKBEr-" },
-{ title: "Episode 53", url: "https://youtube.com/playlist?list=PL36fOhgzBiSHg8LObhARIhwqOXRgfk10m&si=25MbaU2QAhZhsnsV" },
-{ title: "Episode 54", url: "https://youtube.com/playlist?list=PL36fOhgzBiSGXCb93U3IpqSuWLYhKUXcn&si=rO4JOj44L8CkzvET" },
-{ title: "Episode 55", url: "https://youtube.com/playlist?list=PL36fOhgzBiSGrJvKRl7D8sm7TC0ADjb6N&si=CgXJDd3Ps6CkiTuO" },
-{ title: "Episode 56", url: "https://youtube.com/playlist?list=PLvOwl_v43kWZzV-aY0Fc9ONxngojJKPxE&si=wCOJ81VxnYi2Ns-V" },
-{ title: "Episode 59", url: "https://youtu.be/mIJbX221RQ4?si=Us_ETrKfeZN3CxyC" },
-{ title: "Episode 60", url: "https://youtu.be/lHO-yQi_pCk?si=f12rvMzQAuN36hDu" },
-{ title: "Episode 61", url: "https://youtube.com/playlist?list=PLK23qB78SX7TrILV2GpM-GJ6Y_DNkenmN&si=X2xtEFnHnfLT3uCz" },
+{ title: "schawamar 23", url: "https://youtu.be/e_fw1W7FUIo?si=AbDjmdIcVq8cFIQg" },
+{ title: "pain schawamar 24", url: "https://youtu.be/CCcWbCtggn0?si=rWuoqRln9Z_TGqiW" },
+{ title: "sauce schawamar 25", url: "https://youtu.be/1wEnU9" },
   ]]
 },
 
@@ -483,24 +622,24 @@ const SERIES = [
     { title: "Episode 23", url: "https://youtu.be/ju1-axS1maE?si=eEujg_nOQ2otM_cb" },
     { title: "Episode 24", url: "https://youtu.be/ltYta4r2YZg?si=wX0fJzIB6oVtWGPM" },
     { title: "Episode 25", url: "https://youtu.be/vzS0tKhbyhI?si=u1DEFo9-BDnGiAGn" },
-    { title: "perruque 26", url: "https://youtu.be/Wxi19DzLEHc?si=1sXcyP4nyVQHVb3G" },
-    { title: "décoration 27", url: "https://youtu.be/UWCtnh0_5q8?si=HjocNu_iphtK0Acm" },
-    { title: "décodage et réparation téléphone 28", url: "https://youtu.be/nnYgFVElGb4?si=2sNwnoqfH9lw7GHe" },
-    { title: "créateur de contenu 29", url: "https://youtu.be/y8zo4ZTpY7s?si=6dKoAeiY9frcdU5v" },
-    { title: "community manager 30", url: "https://youtu.be/dMDEaoZzvX0?si=I_XvOCbd9IATnd3Q" },
-    { title: "téléopérateur 31", url: "https://youtu.be/pzxezD41lZA?si=eq6i0-WZWSSPbpX9" },
-    { title: "cosmétiques 32", url: "https://youtu.be/C6jp1y0R-iA?si=kO5Arc4OPhUiD7A7" },
-    { title : " biogaz 33", url: "https://youtu.be/TwnfO3oygo0?si=dOkX6yHcx5_6TGVf" },
-    { title: "PayPal 34", url: "https://youtu.be/G1DZcNisAp8?si=Hbei_JbmaDKZF59r" },
-    { title: "tiktok monétiser 35", url: "https://youtu.be/P1lHxt1BZIk?si=UcL5A-YFGSIudcDS" },
+    { title: "Episode 26", url: "https://youtu.be/Wxi19DzLEHc?si=1sXcyP4nyVQHVb3G" },
+    { title: "Episode 27", url: "https://youtu.be/UWCtnh0_5q8?si=HjocNu_iphtK0Acm" },
+    { title: "Episode 28", url: "https://youtu.be/nnYgFVElGb4?si=2sNwnoqfH9lw7GHe" },
+    { title: "Episode 29", url: "https://youtu.be/y8zo4ZTpY7s?si=6dKoAeiY9frcdU5v" },
+    { title: "Episode 30", url: "https://youtu.be/dMDEaoZzvX0?si=I_XvOCbd9IATnd3Q" },
+    { title: "Episode 31", url: "https://youtu.be/pzxezD41lZA?si=eq6i0-WZWSSPbpX9" },
+    { title: "Episode 32", url: "https://youtu.be/C6jp1y0R-iA?si=kO5Arc4OPhUiD7A7" },
+    { title: "Episode 33", url: "https://youtu.be/TwnfO3oygo0?si=dOkX6yHcx5_6TGVf" },
+    { title: "Episode 34", url: "https://youtu.be/G1DZcNisAp8?si=Hbei_JbmaDKZF59r" },
+    { title: "Episode 35", url: "https://youtu.be/P1lHxt1BZIk?si=UcL5A-YFGSIudcDS" },
     { title: "Episode 36", url: "https://youtu.be/X92TzPIGxYg?si=kp50jguVqnZeIzeM" },
-    { title: "Facebook ads 37", url: "https://youtu.be/1m2VQouy9zE?si=Mo8mPR-w26sqTZR3" },
+    { title: "Episode 37", url: "https://youtu.be/1m2VQouy9zE?si=Mo8mPR-w26sqTZR3" },
     { title: "Episode 38", url: "https://youtu.be/ceRzv92ZXvQ?si=wldix6I3Nej24qyi" },
-    { title: " secrétariat bureautique 39", url: "https://youtu.be/7GOm-I9XmRA?si=lS3wMtloBirKSjW0" },
-    { title: "revit 40", url: "https://youtu.be/uQ9_F_BsLbM?si=l_AYw4poq6BR6hAp" },
-    { title: "piloter un drone 41", url: "https://youtu.be/v8IcKXF1aus?si=CWqCQcwUIy4RVku3" },
-    { title: "photogrammétrie 42", url: "https://youtu.be/xtR_mRfCaBE?si=Zl4uDKP8n7G7S6sl" },
-    { title: "création page Facebook prof 43", url: "https://youtu.be/6p65RXpOBOk?si=hirFJV1Y1DNfLiVE" }
+    { title: "Episode 39", url: "https://youtu.be/7GOm-I9XmRA?si=lS3wMtloBirKSjW0" },
+    { title: "Episode 40", url: "https://youtu.be/uQ9_F_BsLbM?si=l_AYw4poq6BR6hAp" },
+    { title: "Episode 41", url: "https://youtu.be/v8IcKXF1aus?si=CWqCQcwUIy4RVku3" },
+    { title: "Episode 42", url: "https://youtu.be/xtR_mRfCaBE?si=Zl4uDKP8n7G7S6sl" },
+    { title: "Episode 43", url: "https://youtu.be/6p65RXpOBOk?si=hirFJV1Y1DNfLiVE" }
   ]]
 },
 
@@ -512,7 +651,7 @@ const SERIES = [
 },
 
 {
-   title: "24h chronos",
+  title: "24h chronos",
   seasons: [[
     { title: "Episode 1", url: "https://youtu.be/wW7g1_NPrZI?si=8FfzWyJZLuAFDZRq" },
     { title: "Playlist 24h chronos", url: "https://youtube.com/playlist?list=PLXkvdiSQ0mvGPlL_A8E_T26v7Hpllwx6Y&si=WhL0vV2jykET5JDY" }
@@ -549,59 +688,101 @@ const SERIES = [
 
 
 
-
-
-
-
+/* RENDER */
 function render(){
-  const app = document.getElementById("app");
 
-  if(!app){
-    console.log("APP introuvable");
-    return;
-  }
+  const app = document.getElementById("app");
 
   app.innerHTML = "";
 
-  if(!SERIES || SERIES.length === 0){
-    app.innerHTML = "<p>Aucune vidéo</p>";
-    return;
-  }
-
   SERIES.forEach(series => {
 
-    const div = document.createElement("div");
-    div.className = "series";
+    // =========================
+    // BLOC SERIE
+    // =========================
+    const seriesDiv =
+      document.createElement("div");
 
-    const title = document.createElement("h3");
+    seriesDiv.className = "series";
+
+    // =========================
+    // TITRE SERIE
+    // =========================
+    const title =
+      document.createElement("h3");
+
     title.textContent = series.title;
 
-    div.appendChild(title);
+    seriesDiv.appendChild(title);
 
-    series.seasons.forEach(season => {
+    // =========================
+    // SAISONS
+    // =========================
+    series.seasons.forEach((season, index) => {
 
+      const seasonDiv =
+        document.createElement("div");
+
+      seasonDiv.className = "season";
+
+      // =========================
+      // TITRE SAISON
+      // =========================
+      const seasonTitle =
+        document.createElement("h4");
+
+      seasonTitle.textContent =
+        "Saison " + (index + 1);
+
+      seasonDiv.appendChild(seasonTitle);
+
+      // =========================
+      // CONTENEUR EPISODES
+      // =========================
+      const episodesContainer =
+        document.createElement("div");
+
+      episodesContainer.className =
+        "episodes";
+
+      // =========================
+      // EPISODES
+      // =========================
       season.forEach(ep => {
 
-        const btn = document.createElement("button");
+        const btn =
+          document.createElement("div");
+
         btn.className = "episode";
-        btn.textContent = ep.title;
 
-        btn.onclick = () => play(ep.url);
+        btn.innerHTML = `
+          🎬 ${ep.title}
+        `;
 
-        div.appendChild(btn);
+        // lecture dans le player
+        btn.onclick = () => {
+          play(ep.url);
+        };
+
+        episodesContainer.appendChild(btn);
+
       });
+
+      seasonDiv.appendChild(
+        episodesContainer
+      );
+
+      seriesDiv.appendChild(
+        seasonDiv
+      );
 
     });
 
-    app.appendChild(div);
+    app.appendChild(seriesDiv);
+
   });
 
-  console.log("Render OK");
 }
-
-
-
-
 /* USERS */
 
 function openUsers(){
@@ -627,7 +808,7 @@ function openUsers(){
   html += `
       </div>
 
-      <button class="close" onclick="this.parentElement.parentElement.remove()">
+          <button class="close" onclick="this.parentElement.parentElement.remove()">
         Fermer
       </button>
     </div>
@@ -637,339 +818,16 @@ function openUsers(){
   document.body.insertAdjacentHTML("beforeend", html);
 }
 
-
-
 /* CHRONO SIMPLE */
-// ==========================
-// UTILISATEUR CONNECTÉ
-// ==========================
-
-const CURRENT_USER = USERS[0];
-// change l'index selon utilisateur
-
-// ==========================
-// CONVERTIR DATE
-// ==========================
-
-function parseExpire(dateStr){
-
-  const parts = dateStr.split("-");
-
-  return new Date(
-    parts[2],        // année
-    parts[1]-1,      // mois
-    parts[0],        // jour
-    23,59,59
-  );
-}
-
-// ==========================
-// DATE EXPIRATION USER
-// ==========================
-
-const expireDate =
-parseExpire(CURRENT_USER.expire);
-
-// ==========================
-// CHRONO
-// ==========================
-
-function updateChrono(){
-
-  const now = new Date();
-
-  const diff =
-    expireDate - now;
-
-  // =======================
-  // EXPIRÉ
-  // =======================
-
-  if(diff <= 0){
-
-    document.getElementById("chrono")
-    .innerText = "EXPIRE";
-
-    openLockPopup();
-
-    return;
-  }
-
-  // =======================
-  // CALCUL
-  // =======================
-
-  const days =
-    Math.floor(diff/(1000*60*60*24));
-
-  const hours =
-    Math.floor(
-      (diff%(1000*60*60*24))
-      /(1000*60*60)
-    );
-
-  const minutes =
-    Math.floor(
-      (diff%(1000*60*60))
-      /(1000*60)
-    );
-
-  const seconds =
-    Math.floor(
-      (diff%(1000*60))
-      /1000
-    );
-
-  // =======================
-  // AFFICHAGE
-  // =======================
-
-  document.getElementById("chrono")
-  .innerText =
-
-    days+"j "+
-    hours+"h "+
-    minutes+"m "+
-    seconds+"s";
-}
-
-// ==========================
-// START
-// ==========================
-
-updateChrono();
-
-setInterval(updateChrono,1000);
-
-
-
-
-
-// ==========================
-// LOGIN MODERNE
-// ==========================
-
-function openLogin(){
-
-document.body.innerHTML = `
-
-<style>
-.login-page{
-position:fixed;
-inset:0;
-background:linear-gradient(135deg,#050505,#111,#1a1a1a);
-display:flex;
-justify-content:center;
-align-items:center;
-padding:20px;
-overflow-y:auto;
-}
-.login-box{
-  margin-bottom:60px;
-}
-display:flex;
-justify-content:center;
-align-items:center;
-overflow:hidden;
-font-family:Arial,sans-serif;
-}
-
-/* glow */
-.login-page::before{
-content:"";
-position:absolute;
-width:500px;
-height:500px;
-background:#ff5a00;
-filter:blur(140px);
-opacity:0.25;
-border-radius:50%;
-top:-120px;
-right:-120px;
-}
-
-/* card */
-.login-box{
-position:relative;
-width:90%;
-max-width:380px;
-background:rgba(20,20,20,0.92);
-backdrop-filter:blur(12px);
-border:1px solid rgba(255,255,255,0.08);
-border-radius:25px;
-padding:30px;
-box-shadow:
-0 0 25px rgba(0,0,0,0.5);
-z-index:10;
-animation:show .4s ease;
-}
-
-@keyframes show{
-from{
-transform:translateY(30px);
-opacity:0;
-}
-to{
-transform:translateY(0);
-opacity:1;
-}
-}
-
-.logo-login{
-font-size:32px;
-font-weight:bold;
-text-align:center;
-margin-bottom:10px;
-color:#ff5a00;
-}
-
-.sub-login{
-text-align:center;
-color:#aaa;
-font-size:14px;
-margin-bottom:25px;
-}
-
-/* input */
-.input-box{
-margin-bottom:15px;
-}
-
-.input-box input{
-width:100%;
-padding:14px;
-border:none;
-outline:none;
-border-radius:14px;
-background:#1e1e1e;
-color:#fff;
-font-size:15px;
-box-sizing:border-box;
-transition:0.2s;
-}
-
-.input-box input:focus{
-background:#2a2a2a;
-box-shadow:
-0 0 0 2px #ff5a00;
-}
-
-/* button */
-.login-btn{
-width:100%;
-padding:14px;
-border:none;
-border-radius:14px;
-background:linear-gradient(
-90deg,
-#ff5a00,
-#ff7b00
-);
-color:#fff;
-font-size:16px;
-font-weight:bold;
-cursor:pointer;
-transition:0.2s;
-margin-top:10px;
-}
-
-.login-btn:hover{
-transform:scale(1.03);
-}
-
-/* footer */
-.login-footer{
-margin-top:20px;
-text-align:center;
-font-size:12px;
-color:#777;
-}
-
-</style>
-
-<div class="login-page">
-
-<div class="login-box">
-
-<div class="logo-login">
-🔥 KOMA LIVE TV
-</div>
-
-<div class="sub-login">
-Connexion sécurisée
-</div>
-
-<div class="input-box">
-<input
-type="text"
-id="loginName"
-placeholder="Nom utilisateur">
-</div>
-
-<div class="input-box">
-<input
-type="password"
-id="loginCode"
-placeholder="Code secret">
-</div>
-
-<button
-class="login-btn"
-onclick="checkLogin()">
-
-🔓 Connexion
-
-</button>
-
-<div class="login-footer">
-Lesfacilitateurs Groupe © 2026
-</div>
-
-</div>
-
-</div>
-`;
-}
-
-
-
-
-
-
-function checkLogin(){
-
-const name =
-document.getElementById("loginName")
-.value.trim();
-
-const code =
-document.getElementById("loginCode")
-.value.trim();
-
-const user = USERS.find(
-u =>
-u.name === name &&
-u.code === code
-);
-
-if(user){
-
-localStorage.setItem(
-"komaUser",
-JSON.stringify(user)
-);
-
-location.reload();
-
-}else{
-
-alert("Nom ou code incorrect");
-
-}
-}
-
-
-
+setInterval(()=>{
+let d=new Date();
+document.getElementById("chrono").innerText=
+d.getHours()+"h"+d.getMinutes()+"m"+d.getSeconds()+"s";
+},1000);
+
+/* INIT */
+loadLinks();
+render();
 
 
 function play(url){
@@ -1119,46 +977,28 @@ function play(url){
   document.body.appendChild(div);
 }
 
-
- 
 function openVideoList(){
 
   let html = `
-  
-  <div class="modal">
+    <div class="modal">
+      <div class="modal-box">
+        <h2>📺 Liste des vidéos</h2>
 
-    <div class="modal-box">
-
-      <h2>📺 Liste des vidéos</h2>
-
-      <div class="list">
+        <div class="list">
   `;
 
-  // =========================
-  // SERIES
-  // =========================
   SERIES.forEach(series => {
 
-    // =========================
-    // SAISONS
-    // =========================
     series.seasons.forEach(season => {
 
-      // =========================
-      // VIDEOS
-      // =========================
       season.forEach(ep => {
 
         html += `
-
-          <div class="item video"
-
-               onclick="play('${ep.url}')">
+          <div class="item video" onclick="play('${ep.url}')">
 
             🎬 ${ep.title}
 
           </div>
-
         `;
 
       });
@@ -1168,33 +1008,22 @@ function openVideoList(){
   });
 
   html += `
+        </div>
+
+        <button class="close"
+          onclick="this.parentElement.parentElement.remove()">
+
+          Fermer
+
+        </button>
 
       </div>
-
-      <button
-        class="close"
-
-        onclick="
-          this.parentElement.parentElement.remove()
-        ">
-
-        Fermer
-
-      </button>
-
     </div>
-
-  </div>
   `;
 
-  document.body.insertAdjacentHTML(
-    "beforeend",
-    html
-  );
-
+  document.body.insertAdjacentHTML("beforeend", html);
 }
-
-
+ 
  
  function openLockPopup(){
 
@@ -1208,7 +1037,6 @@ function openVideoList(){
           text-align:center;
         ">
           🔒 Abonnement expiré
-accès gratuit nom: koma TV code: 237
         </h2>
 
         <p style="
@@ -1233,9 +1061,9 @@ accès gratuit nom: koma TV code: 237
         </button>
 
         <button class="close"
-          onclick="goLogin()"
+          onclick="this.parentElement.parentElement.remove()">
 
-        <button class="close" onclick="closeModal()">Fermer</button>
+          Fermer
 
         </button>
 
@@ -1247,16 +1075,12 @@ accès gratuit nom: koma TV code: 237
   document.body.insertAdjacentHTML("beforeend", html);
 }
 
-function closeModal(){
-  document.querySelector(".modal")?.remove();
-}
-
 function openWhatsApp(){
 
   const message = encodeURIComponent(
-`admin KOMA LIVE TV,
+`Bonjour KOMA LIVE TV,
 
-renouveler votre abonnement à 💯 XAF en suivant le lien et envoyer la capture.
+Je souhaite renouveler mon abonnement.
 
 Lien de renouvellement :
 👇👇
@@ -1264,7 +1088,7 @@ https://helepmoney.vercel.app/?id=card1`
   );
 
   window.open(
-    "https://wa.me/237670035609?text=" + message,
+    "https://wa.me/237670035607?text=" + message,
     "_blank"
   );
 }
