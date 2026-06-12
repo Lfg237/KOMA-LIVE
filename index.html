@@ -893,46 +893,106 @@ function openUsers(){
 
 
 /* CHRONO SIMPLE */
-// =======================
-// DATE DE DEPART
-// =======================
+// ==========================
+// UTILISATEUR CONNECTÉ
+// ==========================
 
-let customDate = new Date(
-  "2026-12-31T23:59:59"
-);
+const CURRENT_USER = USERS[0];
+// change l'index selon utilisateur
 
-// =======================
+// ==========================
+// CONVERTIR DATE
+// ==========================
+
+function parseExpire(dateStr){
+
+  const parts = dateStr.split("-");
+
+  return new Date(
+    parts[2],        // année
+    parts[1]-1,      // mois
+    parts[0],        // jour
+    23,59,59
+  );
+}
+
+// ==========================
+// DATE EXPIRATION USER
+// ==========================
+
+const expireDate =
+parseExpire(CURRENT_USER.expire);
+
+// ==========================
 // CHRONO
-// =======================
+// ==========================
 
 function updateChrono(){
+
+  const now = new Date();
+
+  const diff =
+    expireDate - now;
+
+  // =======================
+  // EXPIRÉ
+  // =======================
+
+  if(diff <= 0){
+
+    document.getElementById("chrono")
+    .innerText = "EXPIRE";
+
+    openLockPopup();
+
+    return;
+  }
+
+  // =======================
+  // CALCUL
+  // =======================
+
+  const days =
+    Math.floor(diff/(1000*60*60*24));
+
+  const hours =
+    Math.floor(
+      (diff%(1000*60*60*24))
+      /(1000*60*60)
+    );
+
+  const minutes =
+    Math.floor(
+      (diff%(1000*60*60))
+      /(1000*60)
+    );
+
+  const seconds =
+    Math.floor(
+      (diff%(1000*60))
+      /1000
+    );
+
+  // =======================
+  // AFFICHAGE
+  // =======================
 
   document.getElementById("chrono")
   .innerText =
 
-    customDate.getDate() + "/" +
-
-    (customDate.getMonth()+1) + "/" +
-
-    customDate.getFullYear() + " " +
-
-    customDate.getHours() + "h" +
-
-    customDate.getMinutes() + "m" +
-
-    customDate.getSeconds() + "s";
-
-  // avance 1 seconde
-  customDate.setSeconds(
-    customDate.getSeconds() + 1
-  );
+    days+"j "+
+    hours+"h "+
+    minutes+"m "+
+    seconds+"s";
 }
 
-// lancement
-setInterval(updateChrono,1000);
+// ==========================
+// START
+// ==========================
 
 updateChrono();
 
+setInterval(updateChrono,1000);
 
 
 /* INIT */
