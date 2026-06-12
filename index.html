@@ -423,26 +423,25 @@ footer{
   z-index:999999;
 }
 
-..modal-box{
+...modal-box{
   background:#111;
 
-  width:100%;
+  width:90%;
   max-width:400px;
 
-  height:85vh;
+  max-height:85vh;
 
   border-radius:20px;
+
+  color:#fff;
 
   display:flex;
   flex-direction:column;
 
-  overflow:hidden;
-
   box-shadow:0 0 25px rgba(0,0,0,0.5);
 
-  color:#fff;
+  overflow:hidden;
 }
-
 .modal-box h2{
   text-align:center;
   color:#ff5a00;
@@ -452,7 +451,7 @@ footer{
 /* =========================
    LIST
 ========================= */
-.list{
+..list{
   flex:1;
 
   overflow-y:auto;
@@ -463,6 +462,8 @@ footer{
   flex-direction:column;
 
   gap:10px;
+
+  min-height:0;
 }
 
 .item{
@@ -485,7 +486,7 @@ footer{
 /* =========================
    CLOSE BUTTON
 ========================= */
-...close{
+.close{
   width:100%;
 
   padding:14px;
@@ -501,14 +502,14 @@ footer{
 
   cursor:pointer;
 
-  border-radius:0;
-
   flex-shrink:0;
 
   position:sticky;
   bottom:0;
 
-  z-index:10;
+  z-index:999;
+
+  border-radius:0;
 }
 </style>
 </head>
