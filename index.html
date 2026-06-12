@@ -1002,118 +1002,6 @@ setInterval(updateChrono,1000);
 
 
 
-// ==========================
-// LOGIN SIMPLE
-// ==========================
-
-function openLogin(){
-
-  let html = `
-  <div class="modal">
-
-    <div class="modal-box">
-
-      <h2>🔐 Connexion</h2>
-
-      <input
-        id="loginCode"
-        placeholder="Entrer votre code"
-        style="
-          width:100%;
-          padding:10px;
-          margin-top:15px;
-          border:none;
-          border-radius:8px;
-        "
-      >
-
-      <button
-        class="wa-btn"
-        style="width:100%;margin-top:15px;"
-        onclick="checkLogin()"
-      >
-        Connexion
-      </button>
-
-    </div>
-
-  </div>
-  `;
-
-  document.body.innerHTML = html;
-}
-
-// ==========================
-// VERIFICATION
-// ==========================
-
-function checkLogin(){
-
-  const code =
-    document.getElementById("loginCode")
-    .value.trim();
-
-  const user =
-    USERS.find(u => u.code === code);
-
-  // ========================
-  // UTILISATEUR OK
-  // ========================
-
-  if(user){
-
-    localStorage.setItem(
-      "komaUser",
-      JSON.stringify(user)
-    );
-
-    location.reload();
-
-  }
-
-  // ========================
-  // ERREUR
-  // ========================
-
-  else{
-
-    alert("Code incorrect");
-
-  }
-}
-
-
-
-// ==========================
-// SESSION
-// ==========================
-
-const SESSION =
-JSON.parse(
-  localStorage.getItem("komaUser")
-);
-
-// ==========================
-// PAS CONNECTÉ
-// ==========================
-
-if(!SESSION){
-
-  openLogin();
-
-}
-
-// ==========================
-// CONNECTÉ
-// ==========================
-
-else{
-
-  loadLinks();
-
-  render();
-
-}
 
 
 // ==========================
@@ -1299,6 +1187,46 @@ Lesfacilitateurs Groupe © 2026
 </div>
 `;
 }
+
+
+
+
+
+
+function checkLogin(){
+
+const name =
+document.getElementById("loginName")
+.value.trim();
+
+const code =
+document.getElementById("loginCode")
+.value.trim();
+
+const user = USERS.find(
+u =>
+u.name === name &&
+u.code === code
+);
+
+if(user){
+
+localStorage.setItem(
+"komaUser",
+JSON.stringify(user)
+);
+
+location.reload();
+
+}else{
+
+alert("Nom ou code incorrect");
+
+}
+}
+
+
+
 
 
 function play(url){
