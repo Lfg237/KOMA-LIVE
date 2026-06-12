@@ -281,9 +281,11 @@ border:2px solid #fff;
 }
 
 .marquee-text{
+  display:inline-block;
   white-space:nowrap;
-  flex:1;
-  animation:move 100s linear infinite;
+  padding-left:100%;
+  animation: scroll 40s linear infinite;
+  will-change: transform;
 }
 
 @keyframes move{
@@ -557,7 +559,7 @@ background:#ff5a00;
   <div class="marquee">
 
   <div class="marquee-text">
-    ❤️ KOMA LIVE TV💥 - ANNONCES ET SPOTS PUBLICITAIRES💥pub 💥 Brenda shopping vente des nuisettes à ngaoundere What's :+237 6 55 54 78 31💯💯💫💥
+    ❤️ KOMA LIVE TV💥 -CONTACT ADMINISTRATION POUR DÉDICACES ANNONCES ET SPOTS PUBLICITAIRES💥 PUB 💥 Brenda shopping vente des nuisettes à ngaoundere What's :+237 6 55 54 78 31💯💯💫💥 
   </div>
 
   <button class="wa-btn" onclick="openWhatsApp()">
