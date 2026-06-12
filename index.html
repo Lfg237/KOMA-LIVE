@@ -232,15 +232,7 @@ overflow:hidden;
 z-index:50;
 }
 
-.marquee-text{
-white-space:nowrap;
-animation:move 35s linear infinite;
-}
 
-@keyframes move{
-0%{transform:translateX(100%)}
-100%{transform:translateX(-100%)}
-}
 .marquee{
 position:fixed;
 bottom:40px;
@@ -256,9 +248,18 @@ z-index:1000;
 }
 
 .marquee-text{
-white-space:nowrap;
-animation:move 12s linear infinite;
-flex:1;
+  display:inline-block;
+  white-space:nowrap;
+  animation: move 50s linear infinite;
+}
+
+@keyframes move{
+  0%{
+    transform: translateX(30%);
+  }
+  100%{
+    transform: translateX(-100%);
+  }
 }
 
 
