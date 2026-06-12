@@ -142,22 +142,40 @@ header{
 ========================= */
 .actions{
   display:flex;
-  gap:5px;
+  align-items:center;
+  gap:8px;
+
+  flex-shrink:0;
+
+  margin-left:5px;
 }
 
-.mini-btn{
-  width:38px;
-  height:38px;
+
+..mini-btn{
+  width:42px;
+  height:42px;
+
+  min-width:42px;
 
   border:none;
-  border-radius:10px;
 
-  background:#ff5a00;
+  border-radius:12px;
+
+  background:linear-gradient(135deg,#ff5a00,#ff7b00);
+
   color:#fff;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:18px;
 
   cursor:pointer;
 
-  font-size:16px;
+  flex-shrink:0;
+
+  box-shadow:0 4px 10px rgba(0,0,0,0.35);
 
   transition:0.2s;
 }
@@ -405,21 +423,24 @@ footer{
   z-index:999999;
 }
 
-.modal-box{
+..modal-box{
+  background:#111;
+
   width:100%;
   max-width:400px;
 
-  max-height:85vh;
+  height:85vh;
 
-  overflow-y:auto;
+  border-radius:20px;
 
-  background:#111;
+  display:flex;
+  flex-direction:column;
 
-  border-radius:18px;
-
-  padding:18px;
+  overflow:hidden;
 
   box-shadow:0 0 25px rgba(0,0,0,0.5);
+
+  color:#fff;
 }
 
 .modal-box h2{
@@ -432,8 +453,15 @@ footer{
    LIST
 ========================= */
 .list{
+  flex:1;
+
+  overflow-y:auto;
+
+  padding:15px;
+
   display:flex;
   flex-direction:column;
+
   gap:10px;
 }
 
@@ -457,26 +485,31 @@ footer{
 /* =========================
    CLOSE BUTTON
 ========================= */
-..close{
+...close{
   width:100%;
 
-  margin-top:15px;
-
-  padding:12px;
+  padding:14px;
 
   border:none;
 
-  background:red;
+  background:linear-gradient(135deg,#ff2d2d,#cc0000);
+
   color:#fff;
 
-  border-radius:12px;
+  font-size:15px;
+  font-weight:bold;
 
   cursor:pointer;
 
+  border-radius:0;
+
+  flex-shrink:0;
+
   position:sticky;
   bottom:0;
-}
 
+  z-index:10;
+}
 </style>
 </head>
 
