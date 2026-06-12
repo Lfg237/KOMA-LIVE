@@ -1013,17 +1013,19 @@ function openLogin(){
 document.body.innerHTML = `
 
 <style>
-
 .login-page{
 position:fixed;
 inset:0;
-background:
-linear-gradient(
-135deg,
-#050505,
-#111,
-#1a1a1a
-);
+background:linear-gradient(135deg,#050505,#111,#1a1a1a);
+display:flex;
+justify-content:center;
+align-items:center;
+padding:20px;
+overflow-y:auto;
+}
+.login-box{
+  margin-bottom:60px;
+}
 display:flex;
 justify-content:center;
 align-items:center;
