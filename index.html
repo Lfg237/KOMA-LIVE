@@ -1,4 +1,4 @@
-4<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -319,7 +319,7 @@ border:2px solid #fff;
   z-index:9999;
 }
 
-.marquee{
+..marquee{
   position:fixed;
   bottom:40px;
   left:0;
@@ -328,18 +328,26 @@ border:2px solid #fff;
   background:#111;
   display:flex;
   align-items:center;
+  justify-content:space-between;
   padding:0 10px;
   gap:10px;
   z-index:1000;
   overflow:hidden;
 }
 
-/* texte défilant */
 .marquee-text{
   flex:1;
-  min-width:0;
   white-space:nowrap;
   animation:move 12s linear infinite;
+}
+
+.wa-btn{
+  flex-shrink:0;
+  background:#25D366;
+  color:#fff;
+  border:none;
+  padding:8px 12px;
+  border-radius:20px;
 }
 
 /* bouton TOUJOURS visible */
@@ -561,9 +569,16 @@ background:#ff5a00;
 <div id="app"></div>
 <div class="marquee">
 
+  <div class="marquee">
+
   <div class="marquee-text">
-   ❤️ KOMA LIVE TV💥 - POUR VOS DÉDICACES ANNONCES ET SPOTS PUBLICITAIRE CONTACT ADMIN  A WHATSAPP
+    ❤️ KOMA LIVE TV💥 - ANNONCES ET SPOTS PUBLICITAIRES
   </div>
+
+  <button class="wa-btn" onclick="openWhatsApp()">
+    📞 WhatsApp
+  </button>
+</div>
 <footer>
   Lesfacilitateurs groupe © 2026 - Tout droit réservé
 </footer>
@@ -764,7 +779,7 @@ const SERIES = [
 },
 
 {
-  title: "24h chronos",
+   title: "24h chronos",
   seasons: [[
     { title: "Episode 1", url: "https://youtu.be/wW7g1_NPrZI?si=8FfzWyJZLuAFDZRq" },
     { title: "Playlist 24h chronos", url: "https://youtube.com/playlist?list=PLXkvdiSQ0mvGPlL_A8E_T26v7Hpllwx6Y&si=WhL0vV2jykET5JDY" }
@@ -806,9 +821,19 @@ const SERIES = [
 
 
 function render(){
-
   const app = document.getElementById("app");
+
+  if(!app){
+    console.log("APP introuvable");
+    return;
+  }
+
   app.innerHTML = "";
+
+  if(!SERIES || SERIES.length === 0){
+    app.innerHTML = "<p>Aucune vidéo</p>";
+    return;
+  }
 
   SERIES.forEach(series => {
 
@@ -817,30 +842,28 @@ function render(){
 
     const title = document.createElement("h3");
     title.textContent = series.title;
+
     div.appendChild(title);
 
     series.seasons.forEach(season => {
 
-      const seasonDiv = document.createElement("div");
-
       season.forEach(ep => {
 
         const btn = document.createElement("button");
-
         btn.className = "episode";
-
         btn.textContent = ep.title;
 
         btn.onclick = () => play(ep.url);
 
-        seasonDiv.appendChild(btn);
+        div.appendChild(btn);
       });
 
-      div.appendChild(seasonDiv);
     });
 
     app.appendChild(div);
   });
+
+  console.log("Render OK");
 }
 
 
