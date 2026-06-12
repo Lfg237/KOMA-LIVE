@@ -283,14 +283,16 @@ border:2px solid #fff;
 .marquee-text{
   display:inline-block;
   white-space:nowrap;
-  padding-left:100%;
-  animation: scroll 40s linear infinite;
-  will-change: transform;
+  animation: move 60s linear infinite; /* augmente ici */
 }
 
 @keyframes move{
-  0%{transform:translateX(100%)}
-  100%{transform:translateX(-100%)}
+  0%{
+    transform: translateX(100%);
+  }
+  100%{
+    transform: translateX(-200%); /* IMPORTANT : trajet plus long */
+  }
 }
 
 .wa-btn{
