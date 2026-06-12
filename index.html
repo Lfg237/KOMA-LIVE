@@ -890,12 +890,50 @@ function openUsers(){
   document.body.insertAdjacentHTML("beforeend", html);
 }
 
+
+
 /* CHRONO SIMPLE */
-setInterval(()=>{
-let d=new Date();
-document.getElementById("chrono").innerText=
-d.getHours()+"h"+d.getMinutes()+"m"+d.getSeconds()+"s";
-},1000);
+// =======================
+// DATE DE DEPART
+// =======================
+
+let customDate = new Date(
+  "2026-12-31T23:59:59"
+);
+
+// =======================
+// CHRONO
+// =======================
+
+function updateChrono(){
+
+  document.getElementById("chrono")
+  .innerText =
+
+    customDate.getDate() + "/" +
+
+    (customDate.getMonth()+1) + "/" +
+
+    customDate.getFullYear() + " " +
+
+    customDate.getHours() + "h" +
+
+    customDate.getMinutes() + "m" +
+
+    customDate.getSeconds() + "s";
+
+  // avance 1 seconde
+  customDate.setSeconds(
+    customDate.getSeconds() + 1
+  );
+}
+
+// lancement
+setInterval(updateChrono,1000);
+
+updateChrono();
+
+
 
 /* INIT */
 loadLinks();
